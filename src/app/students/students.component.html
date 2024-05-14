@@ -1,0 +1,80 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-semibold flex">
+      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
+        >Sessions</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span
+        class="mx-3 text-[#26A59A] cursor-pointer"
+        [routerLink]="['/semesters']"
+        [queryParams]="{ sessionId: students.sessionId }"
+        >{{ students.sessionTitle }}</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span
+        class="mx-3 text-[#26A59A] cursor-pointer"
+        [routerLink]="['/semesters']"
+        [queryParams]="{ sessionId: students.sessionId }"
+        >{{ students.semesterTitle }}</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span class="mx-3">{{ students.levelTitle }}</span>
+    </h2>
+  </div>
+
+  <div class="flex justify-between mb-5">
+    <div>
+      <input type="search" name="search" placeholder="Search something"
+        class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md">
+      <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3">Reset</button>
+      <button class="bg-[#014282] py-2 px-3 text-white rounded-md">Export</button>
+    </div>
+    <div class="flex items-center">
+      <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180" (click)="prevPage()">
+      <span class="mx-3 text-sm">Page {{students.currentPage}} of {{students.totalPages}}</span>
+      <img src="assets/right-caret.svg" alt="Flip caret" (click)="nextPage()">
+    </div>
+  </div>
+
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table
+      class="w-full text-sm text-left rtl:text-right text-gray-500"
+    >
+      <thead
+        class="text-xs text-gray-700 uppercase bg-gray-50"
+      >
+        <tr>
+          <th scope="col" class="px-6 py-3">Student name</th>
+          <th scope="col" class="px-6 py-3">Semester GPA</th>
+          <th scope="col" class="px-6 py-3">CGPA</th>
+          <th scope="col" class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="odd:bg-white even:bg-gray-50 border-b"
+          *ngFor="let student of students.students"
+        >
+          <th
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {{ student.name }}
+          </th>
+          <td class="px-6 py-4">{{student.semesterGPA}}</td>
+          <td class="px-6 py-4">{{student.CGPA}}</td>
+          <td class="px-6 py-4">
+            <a
+              [routerLink]="['/grades']" [queryParams]="{'sessionId': students.sessionId, 'semesterId': students.semesterId, 'levelId': students.levelId, 'studentId': student._id}"
+              class="font-medium text-[#014282] hover:underline"
+              >View Grades</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

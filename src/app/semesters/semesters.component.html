@@ -1,0 +1,21 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-semibold flex">
+      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
+      <img src="assets/right-caret.svg" alt="Right Caret">
+      <span class="mx-3">{{semesters[0].sessionTitle}}</span>
+    </h2>
+    <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md">
+      <img src="assets/add.svg"/>
+      Create New Semester
+    </button>
+  </div>
+  <div class="grid grid-cols-2 gap-5">
+    <div *ngFor="let semester of semesters" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
+      [routerLink]="['/levels']" [queryParams]="{'sessionId': semester.sessionId, 'semesterId': semester._id}">
+      <h4 class="text-3xl font-semibold text-[#26A59A]">{{semester.title}}</h4>
+    </div>
+  </div>
+</div>

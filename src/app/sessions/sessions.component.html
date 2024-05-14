@@ -1,0 +1,17 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-semibold">Sessions</h2>
+    <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md">
+      <img src="assets/add.svg"/>
+      Create New Session
+    </button>
+  </div>
+  <div class="grid grid-cols-2 gap-5">
+    <div *ngFor="let session of sessions" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
+      [routerLink]="['/semesters']" [queryParams]="{'sessionId': session._id}">
+      <h4 class="text-3xl font-semibold text-[green]">{{session.title}}</h4>
+    </div>
+  </div>
+</div>

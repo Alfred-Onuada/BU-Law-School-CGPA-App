@@ -1,0 +1,71 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div class="flex justify-between items-center mb-5">
+    <h2 class="text-xl font-semibold flex">
+      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
+        >Sessions</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span
+        class="mx-3 text-[#26A59A] cursor-pointer"
+        [routerLink]="['/semesters']"
+        [queryParams]="{ sessionId: studentCourseAndGrades.sessionId }"
+        >{{ studentCourseAndGrades.sessionTitle }}</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span
+        class="mx-3 text-[#26A59A] cursor-pointer"
+        [routerLink]="['/semesters']"
+        [queryParams]="{ sessionId: studentCourseAndGrades.sessionId }"
+        >{{ studentCourseAndGrades.semesterTitle }}</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span
+        class="mx-3 text-[#26A59A] cursor-pointer"
+        [routerLink]="['/levels']"
+        [queryParams]="{
+          sessionId: studentCourseAndGrades.sessionId,
+          semesterId: studentCourseAndGrades.levelId
+        }"
+        >{{ studentCourseAndGrades.levelTitle }}</span
+      >
+      <img src="assets/right-caret.svg" alt="Right Caret" />
+      <span class="mx-3">{{ studentCourseAndGrades.studentName }}</span>
+    </h2>
+  </div>
+
+  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+        <tr>
+          <th scope="col" class="px-6 py-3">Course</th>
+          <th scope="col" class="px-6 py-3">Score</th>
+          <th scope="col" class="px-6 py-3">Grade</th>
+          <th scope="col" class="px-6 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          class="odd:bg-white even:bg-gray-50 border-b"
+          *ngFor="let course of studentCourseAndGrades.courses"
+        >
+          <th
+            scope="row"
+            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+          >
+            {{ course.title }}
+          </th>
+          <td class="px-6 py-4">{{ course.score }}</td>
+          <td class="px-6 py-4">{{ course.grade }}</td>
+          <td class="px-6 py-4">
+            <a
+              class="font-medium text-[#014282] hover:underline"
+              >Edit Grade</a
+            >
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
