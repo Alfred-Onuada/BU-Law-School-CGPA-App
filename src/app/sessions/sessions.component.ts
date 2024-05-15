@@ -4,13 +4,14 @@ import { HeaderComponent } from "../header/header.component";
 import { ISession } from '../interfaces/session';
 import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser'
+import { AddSessionModalComponent } from "../add-session-modal/add-session-modal.component";
 
 @Component({
     selector: 'app-sessions',
     standalone: true,
     templateUrl: './sessions.component.html',
     styleUrls: ['./sessions.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink]
+    imports: [CommonModule, HeaderComponent, RouterLink, AddSessionModalComponent]
 })
 export class SessionsComponent {
     sessions: ISession[] = [

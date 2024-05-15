@@ -40,6 +40,7 @@
       <thead class="text-xs text-gray-700 uppercase bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-3">Course</th>
+          <th scope="col" class="px-6 py-3">No. of Units</th>
           <th scope="col" class="px-6 py-3">Score</th>
           <th scope="col" class="px-6 py-3">Grade</th>
           <th scope="col" class="px-6 py-3"></th>
@@ -56,6 +57,7 @@
           >
             {{ course.title }}
           </th>
+          <td class="px-6 py-4">{{ course.units }}</td>
           <td class="px-6 py-4">{{ course.score }}</td>
           <td class="px-6 py-4">{{ course.grade }}</td>
           <td class="px-6 py-4">

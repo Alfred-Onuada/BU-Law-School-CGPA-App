@@ -9,6 +9,7 @@ export interface IStudentCourses {
     courses: {
       _id: string;
       title: string;
+      units: number;
       score: number;
       grade: string;
     }[]

@@ -4,13 +4,14 @@ import { HeaderComponent } from "../header/header.component";
 import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser';
 import { ILevel } from '../interfaces/level';
+import { AddLevelModalComponent } from "../add-level-modal/add-level-modal.component";
 
 @Component({
     selector: 'app-levels',
     standalone: true,
     templateUrl: './levels.component.html',
     styleUrls: ['./levels.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink]
+    imports: [CommonModule, HeaderComponent, RouterLink, AddLevelModalComponent]
 })
 export class LevelsComponent {
     constructor(

@@ -4,13 +4,14 @@ import { Title } from '@angular/platform-browser';
 import { HeaderComponent } from "../header/header.component";
 import { ISemester } from '../interfaces/semester';
 import { RouterLink } from '@angular/router';
+import { AddSemesterModalComponent } from "../add-semester-modal/add-semester-modal.component";
 
 @Component({
     selector: 'app-semesters',
     standalone: true,
     templateUrl: './semesters.component.html',
     styleUrls: ['./semesters.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink]
+    imports: [CommonModule, HeaderComponent, RouterLink, AddSemesterModalComponent]
 })
 export class SemestersComponent {
   constructor(
