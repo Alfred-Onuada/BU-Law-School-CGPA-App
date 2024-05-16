@@ -60,7 +60,7 @@ export class AddSemesterModalComponent implements AfterViewInit {
         next: () => {
           this.form.reset();
           this.showSuccess = true;
-          this.successMessage = 'Session created successfully';
+          this.successMessage = 'Semester created successfully';
 
           setTimeout(() => {
             this.showSuccess = false;

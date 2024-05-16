@@ -3,24 +3,32 @@
 <app-add-level-modal></app-add-level-modal>
 
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
-  <div class="flex justify-between items-center mb-5">
-    <h2 class="text-xl font-semibold flex">
-      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
-      <img src="assets/right-caret.svg" alt="Right Caret">
-      <span class="mx-3 text-[#26A59A] cursor-pointer" [routerLink]="['/semesters']" [queryParams]="{'sessionId': levels[0].sessionId}">{{levels[0].sessionTitle}}</span>
-      <img src="assets/right-caret.svg" alt="Right Caret">
-      <span class="mx-3">{{levels[0].semesterTitle}}</span>
-    </h2>
-    <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md"
-      data-modal-target="add-level-modal" data-modal-toggle="add-level-modal" type="button">
-      <img src="assets/add.svg"/>
-      Create New Level
-    </button>
+  <div *ngIf="loading" class="flex justify-center items-center h-[70vh]">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
+    </div>
   </div>
-  <div class="grid grid-cols-2 gap-5">
-    <div *ngFor="let level of levels" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
-      [routerLink]="['/students']" [queryParams]="{'sessionId': level.sessionId, 'semesterId': level.semesterId, 'levelId': level._id}">
-      <h4 class="text-3xl font-semibold text-[#26A59A]">{{level.title}}</h4>
+  <div *ngIf="!loading && session && semester">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-xl font-semibold flex">
+        <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
+        <img src="assets/right-caret.svg" alt="Right Caret">
+        <span class="mx-3 text-[#26A59A] cursor-pointer" [routerLink]="['/semesters']" [queryParams]="{'sessionId': session.id}">{{session.name}}</span>
+        <img src="assets/right-caret.svg" alt="Right Caret">
+        <span class="mx-3">{{semester.name}}</span>
+      </h2>
+      <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md"
+        data-modal-target="add-level-modal" data-modal-toggle="add-level-modal" type="button">
+        <img src="assets/add.svg"/>
+        Create New Level
+      </button>
+    </div>
+    <div class="grid grid-cols-2 gap-5">
+      <div *ngFor="let level of levels" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
+        [routerLink]="['/students']" [queryParams]="{'levelId': level.id}">
+        <h4 class="text-3xl font-semibold text-[#26A59A]">{{level.name}} Level</h4>
+      </div>
     </div>
   </div>
 </div>

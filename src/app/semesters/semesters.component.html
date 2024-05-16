@@ -24,7 +24,7 @@
     </div>
     <div class="grid grid-cols-2 gap-5">
       <div *ngFor="let semester of semesters" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
-        [routerLink]="['/levels']" [queryParams]="{'sessionId': semester.sessionId, 'semesterId': semester.id}">
+        [routerLink]="['/levels']" [queryParams]="{'semesterId': semester.id}">
         <h4 class="text-3xl font-semibold text-[#26A59A]">{{semester.name}}</h4>
       </div>
     </div>
