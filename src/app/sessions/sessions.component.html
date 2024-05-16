@@ -13,8 +13,8 @@
   </div>
   <div class="grid grid-cols-2 gap-5">
     <div *ngFor="let session of sessions" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
-      [routerLink]="['/semesters']" [queryParams]="{'sessionId': session._id}">
-      <h4 class="text-3xl font-semibold text-[green]">{{session.title}}</h4>
+      [routerLink]="['/semesters']" [queryParams]="{'sessionId': session.id}">
+      <h4 class="text-3xl font-semibold text-[green]">{{session.name}}</h4>
     </div>
   </div>
 </div>

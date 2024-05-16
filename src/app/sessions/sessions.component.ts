@@ -1,10 +1,12 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../header/header.component";
 import { ISession } from '../interfaces/session';
 import { RouterLink } from '@angular/router';
 import { Title } from '@angular/platform-browser'
 import { AddSessionModalComponent } from "../add-session-modal/add-session-modal.component";
+import { SessionService } from '../services/session.service';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-sessions',
@@ -13,18 +15,29 @@ import { AddSessionModalComponent } from "../add-session-modal/add-session-modal
     styleUrls: ['./sessions.component.css'],
     imports: [CommonModule, HeaderComponent, RouterLink, AddSessionModalComponent]
 })
-export class SessionsComponent {
-    sessions: ISession[] = [
-        {_id: '1', title: '2021/2022', createdAt: new Date()},
-        {_id: '2', title: '2022/2023', createdAt: new Date()},
-        {_id: '3', title: '2023/2024', createdAt: new Date()},
-        {_id: '4', title: '2024/2025', createdAt: new Date()},
-        {_id: '1', title: '2025/2026', createdAt: new Date()},
-    ]
+export class SessionsComponent implements OnInit {
+    sessions: ISession[] = []
+    sessionsSub$!: Subscription;
 
     constructor(
         private titleService: Title,
+        private sessionService: SessionService
     ) {
         this.titleService.setTitle("Sessions - Babcock University School of Law and Security Studies");
+    }
+
+    ngOnInit(): void {
+        this.sessionsSub$ = this.sessionService.getSessions().subscribe({
+            next: (sessions) => {
+                console.log(sessions);
+                this.sessions = sessions;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+            complete: () => {
+                this.sessionsSub$.unsubscribe();
+            }
+        })
     }
 }

@@ -3,7 +3,8 @@ import { DataTypes } from "sequelize";
 
 const GRADE = sequelize.define("Grade", {
   id: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   score: {
@@ -11,11 +12,13 @@ const GRADE = sequelize.define("Grade", {
     allowNull: false,
   },
   studentId: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
   courseId: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
   grade: {
@@ -23,5 +26,7 @@ const GRADE = sequelize.define("Grade", {
     allowNull: false,
   }
 }, {timestamps: true});
+
+await sequelize.sync();
 
 export default GRADE;

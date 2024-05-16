@@ -3,7 +3,8 @@ import { DataTypes } from "sequelize";
 
 const ADMIN = sequelize.define("Admin", {
   id: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   fullName: {
@@ -20,5 +21,7 @@ const ADMIN = sequelize.define("Admin", {
     allowNull: false,
   },
 }, {timestamps: true});
+
+await sequelize.sync();
 
 export default ADMIN;

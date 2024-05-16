@@ -3,7 +3,8 @@ import { DataTypes } from "sequelize";
 
 const SESSION = sequelize.define("Session", {
   id: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   name: {
@@ -15,5 +16,7 @@ const SESSION = sequelize.define("Session", {
     allowNull: false,
   }
 }, {timestamps: true});
+
+await sequelize.sync();
 
 export default SESSION;

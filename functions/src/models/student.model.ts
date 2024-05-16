@@ -3,7 +3,8 @@ import { DataTypes } from "sequelize";
 
 const STUDENT = sequelize.define("Student", {
   id: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   firstName: {
@@ -15,9 +16,12 @@ const STUDENT = sequelize.define("Student", {
     allowNull: false,
   },
   levelId: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   }
 }, {timestamps: true});
+
+await sequelize.sync();
 
 export default STUDENT;

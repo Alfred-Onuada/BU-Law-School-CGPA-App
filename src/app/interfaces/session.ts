@@ -1,5 +1,7 @@
 export interface ISession {
-  _id: string,
-  title: string,
+  id: string,
+  name: string,
+  startYear: number,
   createdAt: Date
+  updatedAt: Date
 }

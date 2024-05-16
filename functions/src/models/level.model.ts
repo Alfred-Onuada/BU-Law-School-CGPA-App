@@ -3,7 +3,8 @@ import { DataTypes } from "sequelize";
 
 const LEVEL = sequelize.define("Level", {
   id: {
-    type: DataTypes.UUIDV4,
+    type: DataTypes.STRING,
+    defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
   name: {
@@ -11,5 +12,7 @@ const LEVEL = sequelize.define("Level", {
     allowNull: false,
   },
 }, {timestamps: true});
+
+await sequelize.sync();
 
 export default LEVEL;
