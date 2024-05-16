@@ -10,3 +10,14 @@ export async function getSessions(_: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+export async function createSession(req: Request, res: Response) {
+  try {
+    const { name, startYear } = req.body;
+    const session = await SESSION.create({ name, startYear });
+
+    res.status(201).json({ message: "Success", data: session });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}

@@ -2,6 +2,7 @@ import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
+import { SessionService } from '../services/session.service';
 
 // Declare the global function
 declare let initFlowbite: any;
@@ -15,12 +16,18 @@ declare let initFlowbite: any;
 })
 export class AddSessionModalComponent implements AfterViewInit {
   form: FormGroup;
+  showError = false;
+  errorMessage = '';
+  showSuccess = false;
+  successMessage = '';
   
   constructor(
-    private router: Router
+    private router: Router,
+    private sessionService: SessionService
   ) {
     this.form = new FormGroup({
-      sessionTitle: new FormControl('', Validators.required),
+      name: new FormControl('', Validators.required),
+      startYear: new FormControl(0, Validators.required),
     });
   }
 
@@ -36,5 +43,40 @@ export class AddSessionModalComponent implements AfterViewInit {
     });
   }
 
-  handleSubmit() {}
+  handleSubmit() {
+    if (!this.form.valid) {
+      this.showError = true;
+      this.errorMessage = 'Please fill in all fields correctly';
+
+      setTimeout(() => {
+        this.showError = false;
+        this.errorMessage = '';
+      }, 5000);
+      return;
+    }
+
+    this.sessionService.createSession(this.form.value.name, this.form.value.startYear)
+      .subscribe({
+        next: () => {
+          this.form.reset();
+          this.showSuccess = true;
+          this.successMessage = 'Session created successfully';
+
+          setTimeout(() => {
+            this.showSuccess = false;
+            this.successMessage = '';
+          }, 5000);
+        },
+        error: (error) => {
+          console.error(error);
+          this.showError = true;
+          this.errorMessage = error.message;
+
+          setTimeout(() => {
+            this.showError = false;
+            this.errorMessage = '';
+          }, 5000);
+        }
+      });
+  }
 }

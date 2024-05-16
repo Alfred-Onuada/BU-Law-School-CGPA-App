@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment.development';
 import { ISession } from '../interfaces/session';
+import { IApiResponse } from '../interfaces/api-response';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,13 @@ export class SessionService {
   ) { }
 
   getSessions(): Observable<ISession[]> {
-    return this.httpService.get<ISession[]>(environment.apiUrl + '/sessions');
+    return this.httpService.get<IApiResponse>(`${environment.apiUrl}/sessions`)
+      .pipe(
+        map((response: IApiResponse) => response.data)
+      );
+  }
+
+  createSession(name: string, startYear: number): Observable<IApiResponse> {
+    return this.httpService.post<IApiResponse>(`${environment.apiUrl}/sessions`, { name, startYear });
   }
 }

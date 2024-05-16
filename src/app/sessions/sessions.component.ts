@@ -28,9 +28,8 @@ export class SessionsComponent implements OnInit {
 
     ngOnInit(): void {
         this.sessionsSub$ = this.sessionService.getSessions().subscribe({
-            next: (sessions) => {
-                console.log(sessions);
-                this.sessions = sessions;
+            next: data => {
+                this.sessions = data;
             },
             error: (error) => {
                 console.error(error);
