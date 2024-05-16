@@ -1,0 +1,102 @@
+[debug] [2024-05-16T16:58:22.459Z] ----------------------------------------------------------------------
+[debug] [2024-05-16T16:58:22.461Z] Command:       /opt/homebrew/Cellar/node/21.7.3/bin/node /opt/homebrew/bin/firebase emulators:start --only functions
+[debug] [2024-05-16T16:58:22.461Z] CLI Version:   13.8.3
+[debug] [2024-05-16T16:58:22.461Z] Platform:      darwin
+[debug] [2024-05-16T16:58:22.461Z] Node Version:  v21.7.3
+[debug] [2024-05-16T16:58:22.461Z] Time:          Thu May 16 2024 17:58:22 GMT+0100 (West Africa Standard Time)
+[debug] [2024-05-16T16:58:22.461Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-05-16T16:58:22.463Z] >>> [apiv2][query] GET https://firebase-public.firebaseio.com/cli.json [none]
+[debug] [2024-05-16T16:58:22.514Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-05-16T16:58:22.514Z] > authorizing via signed-in user (aonuada5@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2024-05-16T16:58:22.718Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-16T16:58:22.718Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-05-16T16:58:22.719Z] [hub] writing locator at /var/folders/0k/djpdv2s50w181dxt17y0x1m40000gn/T/hub-bulaw-gpa.json
+[debug] [2024-05-16T16:58:22.725Z] > refreshing access token with scopes: []
+[debug] [2024-05-16T16:58:22.726Z] >>> [apiv2][query] POST https://www.googleapis.com/oauth2/v3/token [none]
+[debug] [2024-05-16T16:58:22.726Z] >>> [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-05-16T16:58:23.363Z] <<< [apiv2][status] POST https://www.googleapis.com/oauth2/v3/token 200
+[debug] [2024-05-16T16:58:23.363Z] <<< [apiv2][body] POST https://www.googleapis.com/oauth2/v3/token [omitted]
+[debug] [2024-05-16T16:58:23.383Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa [none]
+[debug] [2024-05-16T16:58:23.421Z] <<< [apiv2][status] GET https://firebase-public.firebaseio.com/cli.json 200
+[debug] [2024-05-16T16:58:23.422Z] <<< [apiv2][body] GET https://firebase-public.firebaseio.com/cli.json {"cloudBuildErrorAfter":1594252800000,"cloudBuildWarnAfter":1590019200000,"defaultNode10After":1594252800000,"minVersion":"3.0.5","node8DeploysDisabledAfter":1613390400000,"node8RuntimeDisabledAfter":1615809600000,"node8WarnAfter":1600128000000}
+[debug] [2024-05-16T16:58:24.374Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa 200
+[debug] [2024-05-16T16:58:24.375Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa {"projectId":"bulaw-gpa","projectNumber":"135784838523","displayName":"BULaw-GPA","name":"projects/bulaw-gpa","resources":{"hostingSite":"bulaw-gpa"},"state":"ACTIVE","etag":"1_661737c9-2016-4381-9c9a-bb2f48357ffa"}
+[debug] [2024-05-16T16:58:24.546Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-16T16:58:24.546Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-05-16T16:58:24.546Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2024-05-16T16:58:24.547Z] defaultcredentials: writing to file /Users/alfredonuada/.config/firebase/aonuada5_gmail_com_application_default_credentials.json
+[debug] [2024-05-16T16:58:24.549Z] Setting GAC to /Users/alfredonuada/.config/firebase/aonuada5_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to /Users/alfredonuada/.config/firebase/aonuada5_gmail_com_application_default_credentials.json"}}
+[debug] [2024-05-16T16:58:24.550Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa/adminSdkConfig [none]
+[debug] [2024-05-16T16:58:24.995Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa/adminSdkConfig 200
+[debug] [2024-05-16T16:58:24.995Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/bulaw-gpa/adminSdkConfig {"projectId":"bulaw-gpa","storageBucket":"bulaw-gpa.appspot.com"}
+[debug] [2024-05-16T16:58:25.012Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-05-16T16:58:25.012Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-05-16T16:58:25.012Z] Starting Emulator UI with command {"binary":"node","args":["/Users/alfredonuada/.cache/firebase/emulators/ui-v1.11.8/server/server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"/Users/alfredonuada/.cache/firebase/emulators/ui-v1.11.8/server/server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-05-16T16:58:25.109Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-05-16T16:58:25.110Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[info] i  functions: Watching "/Users/alfredonuada/Documents/portfolio/pending_projects/law-school-project/functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"/Users/alfredonuada/Documents/portfolio/pending_projects/law-school-project/functions\" for Cloud Functions..."}}
+[debug] [2024-05-16T16:58:25.225Z] Validating nodejs source
+[debug] [2024-05-16T16:58:26.243Z] > [functions] package.json contents: {
+  "type": "module",
+  "name": "functions",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "20"
+  },
+  "main": "lib/index.js",
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "firebase-admin": "^12.1.0",
+    "firebase-functions": "^5.0.0",
+    "mysql2": "^3.9.7",
+    "sequelize": "^6.37.3"
+  },
+  "devDependencies": {
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-05-16T16:58:26.243Z] Building nodejs source
+[debug] [2024-05-16T16:58:26.244Z] Failed to find version of module node: reached end of search path /Users/alfredonuada/Documents/portfolio/pending_projects/law-school-project/functions/node_modules
+[warn] ⚠  functions: Your requested "node" version "20" doesn't match your global version "21". Using node@21 from host. 
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2024-05-16T16:58:26.246Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-05-16T16:58:26.248Z] Found firebase-functions binary at '/Users/alfredonuada/Documents/portfolio/pending_projects/law-school-project/functions/node_modules/.bin/firebase-functions'
+[info] Serving at port 8082
+
+[info] {"severity":"INFO","message":"Server started"}
+
+[debug] [2024-05-16T16:58:26.434Z] Got response from /__/functions.yaml {"endpoints":{},"specVersion":"v1alpha1","requiredAPIs":[]}
+[info] ✔  functions: Loaded functions definitions from source: . {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: ."}}
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌───────────┬────────────────┬─────────────────────────────────┐
+│ Emulator  │ Host:Port      │ View in Emulator UI             │
+├───────────┼────────────────┼─────────────────────────────────┤
+│ Functions │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions │
+└───────────┴────────────────┴─────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500
+
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 

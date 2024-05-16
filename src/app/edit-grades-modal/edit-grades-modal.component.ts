@@ -26,6 +26,7 @@ export class EditGradesModalComponent implements AfterViewInit {
   ngAfterViewInit(): void {
     // this.router.events.subscribe(event => {
     //   if (event instanceof NavigationEnd) {
+    //     console.log("here");
     //     if (typeof initFlowbite !== 'undefined') {
     //       initFlowbite();
     //     } else {
