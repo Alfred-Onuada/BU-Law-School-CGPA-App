@@ -1,5 +1,7 @@
 <app-header></app-header>
 
+<app-edit-grades-modal></app-edit-grades-modal>
+
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
   <div class="flex justify-between items-center mb-5">
     <h2 class="text-xl font-semibold flex">
@@ -62,6 +64,7 @@
           <td class="px-6 py-4">{{ course.grade }}</td>
           <td class="px-6 py-4">
             <a
+              data-modal-target="edit-grade-modal" data-modal-toggle="edit-grade-modal" type="button"
               class="font-medium text-[#014282] hover:underline"
               >Edit Grade</a
             >

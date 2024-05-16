@@ -4,13 +4,14 @@ import { Title } from '@angular/platform-browser';
 import { HeaderComponent } from '../header/header.component';
 import { RouterLink } from '@angular/router';
 import { IStudentCourses } from '../interfaces/student-courses';
+import { EditGradesModalComponent } from "../edit-grades-modal/edit-grades-modal.component";
 
 @Component({
-  selector: 'app-courses',
-  standalone: true,
-  templateUrl: './courses.component.html',
-  styleUrls: ['./courses.component.css'],
-  imports: [CommonModule, HeaderComponent, RouterLink],
+    selector: 'app-courses',
+    standalone: true,
+    templateUrl: './courses.component.html',
+    styleUrls: ['./courses.component.css'],
+    imports: [CommonModule, HeaderComponent, RouterLink, EditGradesModalComponent]
 })
 export class CoursesComponent {
   constructor(private titleService: Title) {
