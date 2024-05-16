@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 
 // Declare the global function
-declare var initFlowbite: any;
+declare let initFlowbite: any;
 
 @Component({
   selector: 'app-add-session-modal',
@@ -13,7 +13,7 @@ declare var initFlowbite: any;
   templateUrl: './add-session-modal.component.html',
   styleUrls: ['./add-session-modal.component.css']
 })
-export class AddSessionModalComponent implements OnInit {
+export class AddSessionModalComponent implements AfterViewInit {
   form: FormGroup;
   
   constructor(
@@ -24,7 +24,7 @@ export class AddSessionModalComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (typeof initFlowbite !== 'undefined') {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, NavigationEnd } from '@angular/router';
 import { ICourse } from '../interfaces/course';
@@ -12,7 +12,7 @@ declare let initFlowbite: any;
   templateUrl: './edit-courses-modal.component.html',
   styleUrls: ['./edit-courses-modal.component.css']
 })
-export class EditCoursesModalComponent {  
+export class EditCoursesModalComponent implements AfterViewInit {  
 
   selectedLevelId!: string;
   selectedSemesterId!: string;
@@ -32,7 +32,7 @@ export class EditCoursesModalComponent {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (typeof initFlowbite !== 'undefined') {

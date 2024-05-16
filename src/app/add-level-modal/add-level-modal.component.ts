@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { NavigationEnd, Router } from '@angular/router';
 
 // Declare the global function
-declare var initFlowbite: any;
+declare let initFlowbite: any;
 
 @Component({
   selector: 'app-add-level-modal',
@@ -13,7 +13,7 @@ declare var initFlowbite: any;
   templateUrl: './add-level-modal.component.html',
   styleUrls: ['./add-level-modal.component.css']
 })
-export class AddLevelModalComponent {
+export class AddLevelModalComponent implements AfterViewInit {
   form: FormGroup;
   
   constructor(
@@ -24,7 +24,7 @@ export class AddLevelModalComponent {
     });
   }
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         if (typeof initFlowbite !== 'undefined') {
