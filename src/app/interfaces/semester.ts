@@ -1,7 +1,7 @@
 export interface ISemester {
-  _id: string,
-  title: string,
+  id: string,
+  name: string,
   createdAt: Date,
-  sessionTitle: string,
+  updatedAt: Date,
   sessionId: string,
 }

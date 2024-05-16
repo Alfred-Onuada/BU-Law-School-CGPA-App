@@ -34,3 +34,16 @@ body {
   backface-visibility: hidden;
   perspective: 1000px;
 }
+
+.loader {
+  border-top-color: rgb(29 78 216 / 1);
+  border-left-color: rgb(29 78 216 / 1);
+  border-bottom-color: rgb(29 78 216 / 1);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

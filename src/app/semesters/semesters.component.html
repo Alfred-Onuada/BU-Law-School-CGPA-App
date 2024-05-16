@@ -1,24 +1,32 @@
 <app-header></app-header>
 
-<app-add-semester-modal></app-add-semester-modal>
+<app-add-semester-modal [sessionId]="sessionId"></app-add-semester-modal>
 
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
-  <div class="flex justify-between items-center mb-5">
-    <h2 class="text-xl font-semibold flex">
-      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
-      <img src="assets/right-caret.svg" alt="Right Caret">
-      <span class="mx-3">{{semesters[0].sessionTitle}}</span>
-    </h2>
-    <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md"
-      data-modal-target="add-semester-modal" data-modal-toggle="add-semester-modal" type="button">
-      <img src="assets/add.svg"/>
-      Create New Semester
-    </button>
+  <div *ngIf="loading" class="flex justify-center items-center h-[70vh]">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
+    </div>
   </div>
-  <div class="grid grid-cols-2 gap-5">
-    <div *ngFor="let semester of semesters" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
-      [routerLink]="['/levels']" [queryParams]="{'sessionId': semester.sessionId, 'semesterId': semester._id}">
-      <h4 class="text-3xl font-semibold text-[#26A59A]">{{semester.title}}</h4>
+  <div *ngIf="!loading && session && semesters">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-xl font-semibold flex">
+        <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
+        <img src="assets/right-caret.svg" alt="Right Caret">
+        <span class="mx-3">{{session.name}}</span>
+      </h2>
+      <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md"
+        data-modal-target="add-semester-modal" data-modal-toggle="add-semester-modal" type="button">
+        <img src="assets/add.svg"/>
+        Create New Semester
+      </button>
+    </div>
+    <div class="grid grid-cols-2 gap-5">
+      <div *ngFor="let semester of semesters" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
+        [routerLink]="['/levels']" [queryParams]="{'sessionId': semester.sessionId, 'semesterId': semester.id}">
+        <h4 class="text-3xl font-semibold text-[#26A59A]">{{semester.name}}</h4>
+      </div>
     </div>
   </div>
 </div>
