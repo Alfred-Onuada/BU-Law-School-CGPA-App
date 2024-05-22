@@ -1,34 +1,37 @@
-import {config} from "dotenv";
+import { config } from 'dotenv';
 config();
 
-import { Sequelize } from "sequelize";
+import { Sequelize } from 'sequelize';
 
-const sequelize = new Sequelize({
-  database:
-    process.env.NODE_ENV !== 'production' ?
-      process.env.DEV_DB_NAME :
-      process.env.DB_NAME,
-  username:
-    process.env.NODE_ENV !== 'production' ?
-      process.env.DEV_DB_USER :
-      process.env.DB_USER,
-  password:
-    process.env.NODE_ENV !== 'production' ?
-      process.env.DEV_DB_PASS :
-      process.env.DB_PASS,
-  host:
-    process.env.NODE_ENV !== 'production' ?
-      process.env.DEV_DB_HOST :
-      process.env.DB_HOST,
-  dialect: process.env.NODE_ENV !== 'production' ? "mysql" : "postgres",
-});
+let sequelize!: Sequelize;
+
+if (process.env.NODE_ENV === 'production') {
+  sequelize = new Sequelize(process.env.DB_URI as string, {
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  });
+} else {
+  sequelize = new Sequelize({
+    database: process.env.DEV_DB_NAME as string,
+    username: process.env.DEV_DB_USER as string,
+    password: process.env.DEV_DB_PASS as string,
+    host: process.env.DEV_DB_HOST as string,
+    dialect: 'mysql',
+  });
+
+}
 
 (async () => {
   try {
     await sequelize.authenticate();
-    console.info("DB Connection has been established successfully.");
+    console.info('DB Connection has been established successfully.');
   } catch (error) {
-    console.error("Error connecting to database: ", error);
+    console.error('Error connecting to database: ', error);
   }
 })();
 
