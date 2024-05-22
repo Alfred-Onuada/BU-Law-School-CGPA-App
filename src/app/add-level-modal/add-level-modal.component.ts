@@ -1,11 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
 import { LevelService } from '../services/level.service';
-
-// Declare the global function
-declare let initFlowbite: any;
 
 @Component({
   selector: 'app-add-level-modal',
@@ -14,7 +10,7 @@ declare let initFlowbite: any;
   templateUrl: './add-level-modal.component.html',
   styleUrls: ['./add-level-modal.component.css']
 })
-export class AddLevelModalComponent implements AfterViewInit {
+export class AddLevelModalComponent {
   form: FormGroup;
   showError = false;
   errorMessage = '';
@@ -22,26 +18,12 @@ export class AddLevelModalComponent implements AfterViewInit {
   successMessage = '';
   
   constructor(
-    private router: Router,
     private levelService: LevelService
   ) {
     this.form = new FormGroup({
       name: new FormControl(null, Validators.required),
     });
   }
-
-  ngAfterViewInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (typeof initFlowbite !== 'undefined') {
-          initFlowbite();
-        } else {
-          console.error('Could not find the global function initFlowbite()');
-        }
-      }
-    });
-  }
-
 
   handleSubmit() {
     if (!this.form.valid) {

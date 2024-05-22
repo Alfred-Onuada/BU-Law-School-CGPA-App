@@ -1,11 +1,8 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
 import { SessionService } from '../services/session.service';
-
-// Declare the global function
-declare let initFlowbite: any;
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-session-modal',
@@ -14,7 +11,7 @@ declare let initFlowbite: any;
   templateUrl: './add-session-modal.component.html',
   styleUrls: ['./add-session-modal.component.css']
 })
-export class AddSessionModalComponent implements AfterViewInit {
+export class AddSessionModalComponent {
   form: FormGroup;
   showError = false;
   errorMessage = '';
@@ -22,7 +19,7 @@ export class AddSessionModalComponent implements AfterViewInit {
   successMessage = '';
   
   constructor(
-    private router: Router,
+    public dialogRef: MatDialogRef<AddSessionModalComponent>,
     private sessionService: SessionService
   ) {
     this.form = new FormGroup({
@@ -31,16 +28,8 @@ export class AddSessionModalComponent implements AfterViewInit {
     });
   }
 
-  ngAfterViewInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (typeof initFlowbite !== 'undefined') {
-          initFlowbite();
-        } else {
-          console.error('Could not find the global function initFlowbite()');
-        }
-      }
-    });
+  closeModal() {
+    this.dialogRef.close();
   }
 
   handleSubmit() {

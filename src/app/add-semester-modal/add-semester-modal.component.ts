@@ -1,11 +1,7 @@
-import { Component, AfterViewInit, Input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
-import { NavigationEnd, Router } from '@angular/router';
 import { SemestersService } from '../services/semesters.service';
-
-// Declare the global function
-declare let initFlowbite: any;
 
 @Component({
   selector: 'app-add-semester-modal',
@@ -14,7 +10,7 @@ declare let initFlowbite: any;
   templateUrl: './add-semester-modal.component.html',
   styleUrls: ['./add-semester-modal.component.css']
 })
-export class AddSemesterModalComponent implements AfterViewInit {
+export class AddSemesterModalComponent {
   form: FormGroup;
  @Input() sessionId!: string;
   showError = false;
@@ -23,23 +19,10 @@ export class AddSemesterModalComponent implements AfterViewInit {
   successMessage = '';
   
   constructor(
-    private router: Router,
     private semestersService: SemestersService
   ) {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
-    });
-  }
-
-  ngAfterViewInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (typeof initFlowbite !== 'undefined') {
-          initFlowbite();
-        } else {
-          console.error('Could not find the global function initFlowbite()');
-        }
-      }
     });
   }
 

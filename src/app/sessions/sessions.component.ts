@@ -7,13 +7,14 @@ import { Title } from '@angular/platform-browser'
 import { AddSessionModalComponent } from "../add-session-modal/add-session-modal.component";
 import { SessionService } from '../services/session.service';
 import { Subscription } from 'rxjs';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-sessions',
     standalone: true,
     templateUrl: './sessions.component.html',
     styleUrls: ['./sessions.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink, AddSessionModalComponent]
+    imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
 export class SessionsComponent implements OnInit {
     sessions: ISession[] = []
@@ -21,9 +22,14 @@ export class SessionsComponent implements OnInit {
 
     constructor(
         private titleService: Title,
-        private sessionService: SessionService
+        private sessionService: SessionService,
+        public dialog: MatDialog
     ) {
         this.titleService.setTitle("Sessions - Babcock University School of Law and Security Studies");
+    }
+
+    openSessionModal() {
+        this.dialog.open(AddSessionModalComponent);
     }
 
     ngOnInit(): void {

@@ -1,9 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
 import { ICourse } from '../interfaces/course';
-
-declare let initFlowbite: any;
 
 @Component({
   selector: 'app-edit-courses-modal',
@@ -12,7 +9,7 @@ declare let initFlowbite: any;
   templateUrl: './edit-courses-modal.component.html',
   styleUrls: ['./edit-courses-modal.component.css']
 })
-export class EditCoursesModalComponent implements AfterViewInit {  
+export class EditCoursesModalComponent {  
 
   selectedLevelId!: string;
   selectedSemesterId!: string;
@@ -28,21 +25,7 @@ export class EditCoursesModalComponent implements AfterViewInit {
     { _id: '9', name: 'Professional Responsibility', units: 3 },
   ];
 
-  constructor(
-    private router: Router
-  ) {}
-
-  ngAfterViewInit(): void {
-    this.router.events.subscribe(event => {
-      if (event instanceof NavigationEnd) {
-        if (typeof initFlowbite !== 'undefined') {
-          initFlowbite();
-        } else {
-          console.error('Could not find the global function initFlowbite()');
-        }
-      }
-    });
-  }
+  constructor() {}
 
   addNewCourse() {
     this.courses.push({ _id: '', name: '', units: 0 });
