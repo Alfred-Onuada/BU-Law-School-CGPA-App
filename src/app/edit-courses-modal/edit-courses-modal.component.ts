@@ -1,6 +1,7 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ICourse } from '../interfaces/course';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-edit-courses-modal',
@@ -25,7 +26,13 @@ export class EditCoursesModalComponent {
     { _id: '9', name: 'Professional Responsibility', units: 3 },
   ];
 
-  constructor() {}
+  constructor(
+    public dialogRef: MatDialogRef<EditCoursesModalComponent>,
+  ) {}
+
+  closeModal() {
+    this.dialogRef.close();
+  }
 
   addNewCourse() {
     this.courses.push({ _id: '', name: '', units: 0 });

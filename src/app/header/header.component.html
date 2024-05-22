@@ -1,7 +1,3 @@
-<app-edit-courses-modal></app-edit-courses-modal>
-
-<app-add-students-modal></app-add-students-modal>
-
 <div class="flex justify-between bg-[#014282] py-4 px-20">
   <div class="flex items-center" routerLink="/">
     <img
@@ -12,18 +8,12 @@
     <h4 class="text-white font-semibold">School of Law and Security Studies</h4>
   </div>
   <div class="flex items-center">
-    <h4 
-      class="text-white mr-8 underline-animation"
-      data-modal-target="add-student-modal"
-      data-modal-toggle="add-student-modal"
-      type="button"
-    >Add Student</h4>
-    <h4
-      class="text-white mr-8 underline-animation"
-      data-modal-target="edit-courses-modal"
-      data-modal-toggle="edit-courses-modal"
-      type="button"
-    >
+    <h4 class="text-white mr-8 underline-animation" type="button"
+     (click)="openAddStudentsModal()">
+      Add Student
+    </h4>
+    <h4 class="text-white mr-8 underline-animation" type="button"
+      (click)="openEditCoursesModal()">
       Edit Courses
     </h4>
     <h4 class="text-white mr-8 underline-animation">Create a User</h4>
