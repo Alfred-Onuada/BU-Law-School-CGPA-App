@@ -10,7 +10,8 @@ import {
   createLevel,
   getSemester,
   createStudent,
-  createStudentsBulk
+  createStudentsBulk,
+  getStudents,
 } from '../controllers/api.controller';
 const router = Router();
 
@@ -35,5 +36,7 @@ router.get('/semester/:semesterId', getSemester);
 router.post('/student', createStudent);
 
 router.post('/student/bulk', createStudentsBulk);
+
+router.get('/students', getStudents);
 
 export default router;

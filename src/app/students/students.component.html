@@ -28,14 +28,19 @@
   <div class="flex justify-between mb-5">
     <div>
       <input type="search" name="search" placeholder="Search something"
-        class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md">
-      <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3">Reset</button>
-      <button class="bg-[#014282] py-2 px-3 text-white rounded-md">Export</button>
+        class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md"
+        [(ngModel)]="searchTerm">
+      <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3"
+        (click)="resetSearch()">Reset</button>
+      <button *ngIf="!searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md"
+        (click)="exportAllStudents()">Export all Students</button>
+      <button *ngIf="searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md"
+        (click)="exportResults()">Export Results</button>
     </div>
     <div class="flex items-center">
-      <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180" (click)="prevPage()">
+      <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180 cursor-pointer" (click)="prevPage()">
       <span class="mx-3 text-sm">Page {{currentPage}} of {{totalPages}}</span>
-      <img src="assets/right-caret.svg" alt="Flip caret" (click)="nextPage()">
+      <img src="assets/right-caret.svg" alt="Flip caret" class="cursor-pointer" (click)="nextPage()">
     </div>
   </div>
 
@@ -62,7 +67,7 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            {{ student.name }}
+            {{ student.firstName + " " + student.lastName }}
           </th>
           <td class="px-6 py-4">{{student.semesterGPA}}</td>
           <td class="px-6 py-4">{{student.CGPA}}</td>

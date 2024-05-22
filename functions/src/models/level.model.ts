@@ -9,6 +9,7 @@ const LEVEL = sequelize.define("Level", {
   },
   name: {
     type: DataTypes.INTEGER,
+    unique: true,
     allowNull: false,
   },
 }, {timestamps: true});

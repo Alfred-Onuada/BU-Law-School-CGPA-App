@@ -13,7 +13,9 @@ if (process.env.NODE_ENV === 'production') {
         require: true,
         rejectUnauthorized: false,
       },
-    },
+      charset: 'utf8mb4',
+      collate: 'utf8mb4_unicode_ci' // allows case insensitive search
+    }
   });
 } else {
   sequelize = new Sequelize({

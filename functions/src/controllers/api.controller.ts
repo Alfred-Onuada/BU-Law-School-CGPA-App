@@ -3,6 +3,7 @@ import SESSION from "../models/session.model";
 import SEMESTER from "../models/semester.model";
 import LEVEL from "../models/level.model";
 import STUDENT from "../models/student.model";
+import { Op } from "sequelize";
 
 export async function getSessions(_: Request, res: Response) {
   try {
@@ -166,6 +167,84 @@ export async function createStudentsBulk(req: Request, res: Response) {
     res.status(201).json({ message: "Success" });
   } catch (error: any) {
     console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getStudents(req: Request, res: Response) {
+  try {
+    const {sessionId, level} = req.query;
+
+    if (!sessionId || !level) {
+      res.status(400).json({ message: "Invalid query" });
+      return;
+    }
+
+    // get session info
+    const session = await SESSION.findByPk(sessionId as string);
+
+    // check start year
+    if (!session) {
+      res.status(404).json({ message: "Session not found" });
+      return;
+    }
+    const sessionStartYear = session.toJSON().startYear;
+
+    let limit = 10;
+
+    if (typeof req.query.limit === 'string') {
+      if (parseInt(req.query.limit) > 0) {
+        limit = parseInt(req.query.limit);
+      } else if (parseInt(req.query.limit) === -1) {
+        limit = 100_000_000; // there will never be 100million students in a school :)
+      }
+    }
+    
+    // get current page
+    let page = 1;
+    let skip = 0;
+
+    if (typeof req.query.page === 'string' && parseInt(req.query.page as string) >= 1) {
+      page = parseInt(req.query.page as string);
+      skip = (page - 1) * limit;
+    }
+
+    // check for search query
+    let query = '';
+    let queryClause = {};
+    if (typeof req.query.query === 'string' && req.query.query.trim().length >= 2) {
+      query = req.query.query;
+      queryClause = {
+        [Op.or]: [
+          { firstName: { [Op.like]: `%${query}%` } },
+          { lastName: { [Op.like]: `%${query}%` } }
+        ]
+      };
+    }
+
+    console.log(JSON.stringify({
+      where: queryClause,
+      order: [["lastName", "ASC"]],
+      limit,
+      offset: skip,
+    }))
+
+    const result = await STUDENT.findAndCountAll({
+      where: queryClause,
+      order: [["lastName", "ASC"]],
+      limit,
+      offset: skip,
+    });
+
+    // Adding CGPA and semesterGPA fields with default values to each student
+    const studentsWithGPA = result.rows.map(student => ({
+      ...student.toJSON(),
+      CGPA: 0,
+      semesterGPA: 0
+    }));
+
+    res.status(200).json({ message: "Success", data: { students: studentsWithGPA, total: result.count } });
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 }
