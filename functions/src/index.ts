@@ -4,6 +4,7 @@ import cors from 'cors';
 
 const app = express();
 
+app.use(express.json());
 app.use(
   cors({
     origin: ['https://bulaw-gpa.web.app', 'http://localhost:4200'],
