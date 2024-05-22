@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { IApiResponse } from '../interfaces/api-response';
 import { Observable, map } from 'rxjs';
-import { environment } from 'src/environments/environment.development';
+import { environment } from 'src/environments/environment';
 import { ILevel } from '../interfaces/level';
 import { ISemester } from '../interfaces/semester';
 import { ISession } from '../interfaces/session';
