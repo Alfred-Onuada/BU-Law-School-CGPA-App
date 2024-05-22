@@ -4,6 +4,7 @@ import SEMESTER from "../models/semester.model";
 import LEVEL from "../models/level.model";
 import STUDENT from "../models/student.model";
 import { Op } from "sequelize";
+import sequelize from "sequelize/lib/sequelize";
 
 export async function getSessions(_: Request, res: Response) {
   try {
@@ -173,7 +174,7 @@ export async function createStudentsBulk(req: Request, res: Response) {
 
 export async function getStudents(req: Request, res: Response) {
   try {
-    const {sessionId, level} = req.query;
+    const { sessionId, level } = req.query;
 
     if (!sessionId || !level) {
       res.status(400).json({ message: "Invalid query" });
@@ -190,20 +191,25 @@ export async function getStudents(req: Request, res: Response) {
     }
     const sessionStartYear = session.toJSON().startYear;
 
-    let limit = 10;
+    // Ensure the level is an integer
+    const requestedLevel = parseInt(level as string);
+    if (isNaN(requestedLevel)) {
+      res.status(400).json({ message: "Invalid level query parameter" });
+      return;
+    }
 
+    let limit = 10;
     if (typeof req.query.limit === 'string') {
       if (parseInt(req.query.limit) > 0) {
         limit = parseInt(req.query.limit);
       } else if (parseInt(req.query.limit) === -1) {
-        limit = 100_000_000; // there will never be 100million students in a school :)
+        limit = 100_000_000; // there will never be 100 million students in a school :)
       }
     }
     
     // get current page
     let page = 1;
     let skip = 0;
-
     if (typeof req.query.page === 'string' && parseInt(req.query.page as string) >= 1) {
       page = parseInt(req.query.page as string);
       skip = (page - 1) * limit;
@@ -222,12 +228,24 @@ export async function getStudents(req: Request, res: Response) {
       };
     }
 
-    console.log(JSON.stringify({
-      where: queryClause,
-      order: [["lastName", "ASC"]],
-      limit,
-      offset: skip,
-    }))
+    // Calculate the year difference to determine current level
+    const currentLevelClause = {
+      [Op.and]: [
+        sequelize.where(
+          sequelize.fn(
+            'FLOOR',
+            sequelize.literal("(" + sessionStartYear + " - `yearEnrolled`) + (`levelAtEnrollment` / 100)")
+          ),
+          requestedLevel / 100
+        )
+      ]
+    };
+
+    // Merge query clauses
+    queryClause = {
+      ...queryClause,
+      ...currentLevelClause
+    };
 
     const result = await STUDENT.findAndCountAll({
       where: queryClause,
