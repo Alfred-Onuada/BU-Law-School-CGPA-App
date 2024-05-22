@@ -9,13 +9,14 @@ import { Subscription } from 'rxjs';
 import { LevelService } from '../services/level.service';
 import { ISemester } from '../interfaces/semester';
 import { ISession } from '../interfaces/session';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-levels',
     standalone: true,
     templateUrl: './levels.component.html',
     styleUrls: ['./levels.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink, AddLevelModalComponent]
+    imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
 export class LevelsComponent implements OnInit {
     levels: ILevel[] = [];
@@ -32,9 +33,14 @@ export class LevelsComponent implements OnInit {
     constructor(
         private titleService: Title,
         private router: Router,
-        private levelService: LevelService
+        private levelService: LevelService,
+        public dialog: MatDialog
     ) {
         this.titleService.setTitle("Levels - Babcock University School of Law and Security Studies");
+    }
+
+    openAddLevelModal() {
+        this.dialog.open(AddLevelModalComponent);
     }
 
     ngOnInit(): void {

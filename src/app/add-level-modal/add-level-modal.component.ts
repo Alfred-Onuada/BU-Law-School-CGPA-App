@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LevelService } from '../services/level.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-add-level-modal',
@@ -18,11 +19,16 @@ export class AddLevelModalComponent {
   successMessage = '';
   
   constructor(
-    private levelService: LevelService
+    private levelService: LevelService,
+    public dialog: MatDialogRef<AddLevelModalComponent>
   ) {
     this.form = new FormGroup({
       name: new FormControl(null, Validators.required),
     });
+  }
+
+  closeModal() {
+    this.dialog.close();
   }
 
   handleSubmit() {
