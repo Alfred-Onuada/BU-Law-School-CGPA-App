@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const COURSE = sequelize.define("Course", {
@@ -32,6 +32,8 @@ const COURSE = sequelize.define("Course", {
   },
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default COURSE;

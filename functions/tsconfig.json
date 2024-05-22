@@ -1,17 +1,15 @@
 {
   "compilerOptions": {
     "module": "NodeNext",
-    "noImplicitReturns": true,
-    "noUnusedLocals": true,
-    "outDir": "lib",
-    "sourceMap": true,
-    "strict": true,
     "target": "ESNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
-    "moduleResolution": "NodeNext"
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./lib",
+    "rootDir": "./src"
   },
-  "compileOnSave": true,
-  "include": [
-    "src"
-  ]
+  "include": ["src"],
+  "exclude": ["node_modules"]
 }

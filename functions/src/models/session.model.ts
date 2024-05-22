@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const SESSION = sequelize.define("Session", {
@@ -17,6 +17,8 @@ const SESSION = sequelize.define("Session", {
   }
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default SESSION;

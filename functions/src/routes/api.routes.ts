@@ -11,7 +11,7 @@ import {
   getSemester,
   createStudent,
   createStudentsBulk
-} from '../controllers/api.controller.js';
+} from '../controllers/api.controller';
 const router = Router();
 
 router.get('/sessions', getSessions);

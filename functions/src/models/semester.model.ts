@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const SEMESTER = sequelize.define("Semester", {
@@ -18,6 +18,8 @@ const SEMESTER = sequelize.define("Semester", {
   }
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default SEMESTER;

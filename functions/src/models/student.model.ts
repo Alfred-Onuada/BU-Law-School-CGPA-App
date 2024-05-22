@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const STUDENT = sequelize.define("Student", {
@@ -27,6 +27,8 @@ const STUDENT = sequelize.define("Student", {
 
 // create the derived field GPA and CGPA from grades
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default STUDENT;

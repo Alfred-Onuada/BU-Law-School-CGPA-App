@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const LEVEL = sequelize.define("Level", {
@@ -13,6 +13,8 @@ const LEVEL = sequelize.define("Level", {
   },
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default LEVEL;

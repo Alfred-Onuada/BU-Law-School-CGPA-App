@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const ADMIN = sequelize.define("Admin", {
@@ -22,6 +22,8 @@ const ADMIN = sequelize.define("Admin", {
   },
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default ADMIN;

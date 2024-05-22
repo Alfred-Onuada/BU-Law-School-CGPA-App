@@ -1,4 +1,4 @@
-import sequelize from "../config/db.js";
+import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 
 const GRADE = sequelize.define("Grade", {
@@ -27,6 +27,8 @@ const GRADE = sequelize.define("Grade", {
   }
 }, {timestamps: true});
 
-await sequelize.sync();
+(async () => {
+  await sequelize.sync();
+})();
 
 export default GRADE;

@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import SESSION from "../models/session.model.js";
-import SEMESTER from "../models/semester.model.js";
-import LEVEL from "../models/level.model.js";
-import STUDENT from "../models/student.model.js";
+import SESSION from "../models/session.model";
+import SEMESTER from "../models/semester.model";
+import LEVEL from "../models/level.model";
+import STUDENT from "../models/student.model";
 
 export async function getSessions(_: Request, res: Response) {
   try {
