@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import SESSION from "../models/session.model.js";
 import SEMESTER from "../models/semester.model.js";
 import LEVEL from "../models/level.model.js";
+import STUDENT from "../models/student.model.js";
 
 export async function getSessions(_: Request, res: Response) {
   try {
@@ -129,6 +130,42 @@ export async function getSession(req: Request, res: Response) {
 
     res.status(200).json({ message: "Success", data: session });
   } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function createStudent(req: Request, res: Response) {
+  try {
+    const studentInfo = req.body;
+
+    if (typeof studentInfo !== 'object' || Object.keys(studentInfo).length === 0) {
+      res.status(400).json({ message: "Invalid data" });
+      return;
+    }
+
+    await STUDENT.create(studentInfo);
+
+    res.status(201).json({ message: "Success" });
+  } catch (error: any) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function createStudentsBulk(req: Request, res: Response) {
+  try {
+    const studentsInfo = req.body;
+
+    if (!Array.isArray(studentsInfo) || studentsInfo.length === 0) {
+      res.status(400).json({ message: "Invalid data" });
+      return;
+    }
+
+    await STUDENT.bulkCreate(studentsInfo);
+
+    res.status(201).json({ message: "Success" });
+  } catch (error: any) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }
