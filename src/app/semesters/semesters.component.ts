@@ -8,19 +8,21 @@ import { AddSemesterModalComponent } from "../add-semester-modal/add-semester-mo
 import { Subscription } from 'rxjs';
 import { SemestersService } from '../services/semesters.service';
 import { ISession } from '../interfaces/session';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-semesters',
     standalone: true,
     templateUrl: './semesters.component.html',
     styleUrls: ['./semesters.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink, AddSemesterModalComponent]
+    imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
 export class SemestersComponent implements OnInit {
   constructor(
     private titleService: Title,
     private router: Router,
-    private semesterService: SemestersService
+    private semesterService: SemestersService,
+    public dialog: MatDialog
   ) {
     this.titleService.setTitle("Semesters - Babcock University School of Law and Security Studies");
   }
@@ -32,6 +34,14 @@ export class SemestersComponent implements OnInit {
   showError = false;
   errorMessage = '';
   sessionId = '';
+
+  openSemesterModal() {
+    this.dialog.open(AddSemesterModalComponent, {
+      data: {
+        sessionId: this.sessionId
+      }
+    });
+  }
 
   ngOnInit() {
     this.sessionId = this.router.parseUrl(this.router.url).queryParams['sessionId'];

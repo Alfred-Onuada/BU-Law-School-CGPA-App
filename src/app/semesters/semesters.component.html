@@ -1,7 +1,5 @@
 <app-header></app-header>
 
-<app-add-semester-modal [sessionId]="sessionId"></app-add-semester-modal>
-
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
   <div *ngIf="loading" class="flex justify-center items-center h-[70vh]">
     <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
@@ -16,8 +14,8 @@
         <img src="assets/right-caret.svg" alt="Right Caret">
         <span class="mx-3">{{session.name}}</span>
       </h2>
-      <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md"
-        data-modal-target="add-semester-modal" data-modal-toggle="add-semester-modal" type="button">
+      <button class="bg-[#26A59A] py-2 px-3 text-white flex items-center rounded-md shadow-md" type="button"
+        (click)="openSemesterModal()">
         <img src="assets/add.svg"/>
         Create New Semester
       </button>
