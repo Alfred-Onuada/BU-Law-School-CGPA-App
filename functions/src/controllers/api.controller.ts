@@ -99,3 +99,36 @@ export async function createLevel(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+export async function getSemester(req: Request, res: Response) {
+  try {
+    const { semesterId } = req.params;
+    const semester = await SEMESTER.findByPk(semesterId);
+
+    if (!semester) {
+      res.status(404).json({ message: "Semester not found" });
+      return;
+    }
+
+    res.status(200).json({ message: "Success", data: semester });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+
+export async function getSession(req: Request, res: Response) {
+  try {
+    const { sessionId } = req.params;
+    const session = await SESSION.findByPk(sessionId);
+
+    if (!session) {
+      res.status(404).json({ message: "Session not found" });
+      return;
+    }
+
+    res.status(200).json({ message: "Success", data: session });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}

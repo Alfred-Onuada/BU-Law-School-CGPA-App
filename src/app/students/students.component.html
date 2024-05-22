@@ -10,18 +10,18 @@
       <span
         class="mx-3 text-[#26A59A] cursor-pointer"
         [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId: students.sessionId }"
-        >{{ students.sessionTitle }}</span
+        [queryParams]="{ sessionId: sessionId }"
+        >{{ session.name }}</span
       >
       <img src="assets/right-caret.svg" alt="Right Caret" />
       <span
         class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId: students.sessionId }"
-        >{{ students.semesterTitle }}</span
+        [routerLink]="['/level']"
+        [queryParams]="{ semesterId: semesterId }"
+        >{{ semester.name }}</span
       >
       <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span class="mx-3">{{ students.levelTitle }}</span>
+      <span class="mx-3">{{ level }}</span>
     </h2>
   </div>
 
@@ -34,7 +34,7 @@
     </div>
     <div class="flex items-center">
       <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180" (click)="prevPage()">
-      <span class="mx-3 text-sm">Page {{students.currentPage}} of {{students.totalPages}}</span>
+      <span class="mx-3 text-sm">Page {{currentPage}} of {{totalPages}}</span>
       <img src="assets/right-caret.svg" alt="Flip caret" (click)="nextPage()">
     </div>
   </div>
@@ -56,7 +56,7 @@
       <tbody>
         <tr
           class="odd:bg-white even:bg-gray-50 border-b"
-          *ngFor="let student of students.students"
+          *ngFor="let student of students"
         >
           <th
             scope="row"
@@ -68,7 +68,7 @@
           <td class="px-6 py-4">{{student.CGPA}}</td>
           <td class="px-6 py-4">
             <a
-              [routerLink]="['/grades']" [queryParams]="{'sessionId': students.sessionId, 'semesterId': students.semesterId, 'levelId': students.levelId, 'studentId': student._id}"
+              [routerLink]="['/grades']" [queryParams]="{}"
               class="font-medium text-[#014282] hover:underline"
               >View Grades</a
             >

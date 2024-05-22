@@ -1,9 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { HeaderComponent } from "../header/header.component";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { IStudent } from '../interfaces/students';
+import { ISession } from '../interfaces/session';
+import { ISemester } from '../interfaces/semester';
+import { Subscription } from 'rxjs';
+import { SemestersService } from '../services/semesters.service';
+import { SessionService } from '../services/session.service';
 
 @Component({
     selector: 'app-students',
@@ -12,35 +17,80 @@ import { IStudent } from '../interfaces/students';
     styleUrls: ['./students.component.css'],
     imports: [CommonModule, HeaderComponent, RouterLink]
 })
-export class StudentsComponent {
+export class StudentsComponent implements OnInit {
+  sessionId: string;
+  level: string;
+  semesterId: string;
+  
+  students: IStudent[] = [];
+  studentsSub$!: Subscription;
+  session!: ISession;
+  sessionSub$!: Subscription;
+  semester!: ISemester;
+  semesterSub$!: Subscription;
+
+  currentPage: number = 1;
+  totalPages: number = 1;
+
+  showError = false;
+  errorMessage = '';
+  loading = true;
+
   constructor(
-    private titleService: Title
+    private titleService: Title,
+    private router: Router,
+    private semesterService: SemestersService,
+    private sessionService: SessionService
   ) {
     this.titleService.setTitle('Students - Babcock University School of Law and Security Studies');
+    this.sessionId = this.router.parseUrl(this.router.url).queryParams['sessionId'];
+    this.level = this.router.parseUrl(this.router.url).queryParams['level'];
+    this.semesterId = this.router.parseUrl(this.router.url).queryParams['semesterId'];
   }
 
-  students: IStudent = {
-    levelTitle: '100 Level',
-    levelId: '1',
-    semesterId: '1',
-    semesterTitle: 'First Semester',
-    sessionId: '1',
-    sessionTitle: '2019/2020',
-    currentPage: 1,
-    totalPages: 10,
-    students: [
-      { _id: '1', name: 'Michael Johnson', semesterGPA: 3.8, CGPA: 3.8 },
-      { _id: '2', name: 'Emily Williams', semesterGPA: 3.5, CGPA: 3.5 },
-      { _id: '3', name: 'Daniel Brown', semesterGPA: 3.2, CGPA: 3.2 },
-      { _id: '4', name: 'Sophia Davis', semesterGPA: 3.7, CGPA: 3.7 },
-      { _id: '5', name: 'Ethan Martinez', semesterGPA: 3.9, CGPA: 3.9 },
-      { _id: '6', name: 'Olivia Taylor', semesterGPA: 3.6, CGPA: 3.6 },
-      { _id: '7', name: 'Matthew Anderson', semesterGPA: 3.4, CGPA: 3.4 },
-      { _id: '8', name: 'Ava Thomas', semesterGPA: 3.8, CGPA: 3.8 },
-      { _id: '9', name: 'William Wilson', semesterGPA: 3.3, CGPA: 3.3 },
-      { _id: '10', name: 'Isabella Clark', semesterGPA: 3.7, CGPA: 3.7 }
-    ]
-  };
+  ngOnInit() {
+    this.semesterSub$ = this.semesterService.getSemester(this.semesterId).subscribe({
+      next: (semester) => {
+        this.semester = semester;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 5000);
+      },
+      complete: () => {
+        this.semesterSub$.unsubscribe();
+      }
+    });
+
+    this.sessionSub$ = this.sessionService.getSession(this.sessionId).subscribe({
+      next: (session) => {
+        this.session = session;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 5000);
+      },
+      complete: () => {
+        this.sessionSub$.unsubscribe();
+      }
+    });
+  }
 
   prevPage() {}
 

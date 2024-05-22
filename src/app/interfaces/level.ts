@@ -1,6 +1,6 @@
 export interface ILevel {
   id: string,
-  name: string,
+  name: number,
   createdAt: string,
   updatedAt: string,
 }
