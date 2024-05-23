@@ -35,6 +35,7 @@ export class StudentService {
   getStudents(
     sessionId: string,
     level: number,
+    semesterId: string,
     pageSize: number,
     currentPage?: number,
     query?: string
@@ -44,6 +45,7 @@ export class StudentService {
         params: {
           sessionId,
           level,
+          semesterId,
           limit: pageSize.toString(),
           page: currentPage || 1,
           query: query || '',

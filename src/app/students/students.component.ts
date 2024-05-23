@@ -113,7 +113,7 @@ export class StudentsComponent implements OnInit {
       }
     });
 
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
@@ -144,7 +144,7 @@ export class StudentsComponent implements OnInit {
     this.currentPage--;
     this.loading = true;
 
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize, this.currentPage, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
@@ -175,7 +175,7 @@ export class StudentsComponent implements OnInit {
     this.currentPage++;
     this.loading = true;
 
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize, this.currentPage, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
@@ -201,7 +201,7 @@ export class StudentsComponent implements OnInit {
   searchStudents() {
     this.loading = true;
 
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize, 0, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, 0, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
@@ -229,7 +229,7 @@ export class StudentsComponent implements OnInit {
     this.query = '';
     this.loading = true;
 
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize, 0, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, 0, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
@@ -254,7 +254,7 @@ export class StudentsComponent implements OnInit {
   }
 
   exportAllStudents() {
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, -1, 0, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, -1, 0, this.query).subscribe({
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);
@@ -279,7 +279,7 @@ export class StudentsComponent implements OnInit {
   }
 
   exportResults() {
-    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.pageSize, this.currentPage, this.query).subscribe({
+    this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);

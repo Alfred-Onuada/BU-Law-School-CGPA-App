@@ -181,9 +181,9 @@ export async function createStudentsBulk(req: Request, res: Response) {
 
 export async function getStudents(req: Request, res: Response) {
   try {
-    const { sessionId, level } = req.query;
+    const { sessionId, level, semesterId } = req.query;
 
-    if (!sessionId || !level) {
+    if (!sessionId || !level || !semesterId) {
       res.status(400).json({ message: 'Invalid query' });
       return;
     }
@@ -271,11 +271,41 @@ export async function getStudents(req: Request, res: Response) {
       offset: skip,
     });
 
-    // Adding CGPA and semesterGPA fields with default values to each student
-    const studentsWithGPA = result.rows.map((student) => ({
-      ...student.toJSON(),
-      CGPA: 0,
-      semesterGPA: 0,
+    // Calculate CGPA and semesterGPA for each student
+    const studentsWithGPA = await Promise.all(result.rows.map(async (student) => {
+      const studentData = student.toJSON();
+
+      const grades = await GRADE.findAll({
+        where: {
+          studentId: studentData.id,
+          semesterId,
+          studentLevel: level,
+        },
+        include: [{
+          model: COURSE,
+          as: 'course',
+          required: true,
+        }]
+      });
+
+      const allCoursesWithinSemester = await COURSE.findAll({
+        where: {
+          semesterId,
+          sessionId,
+          level,
+        }
+      });
+
+      let totalGradePointsGained = grades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+      let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+
+      const semesterGPA = totalPossibleGradePoints > 0
+        ? (totalGradePointsGained / totalPossibleGradePoints) * 5
+        : 0;
+
+      // I need to run the calculation for CGPA
+
+      return { ...studentData, semesterGPA: parseFloat(semesterGPA.toFixed(2)), CGPA: 0};
     }));
 
     res
@@ -285,6 +315,7 @@ export async function getStudents(req: Request, res: Response) {
         data: { students: studentsWithGPA, total: result.count },
       });
   } catch (error: any) {
+    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }

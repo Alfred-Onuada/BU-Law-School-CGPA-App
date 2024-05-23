@@ -1,5 +1,6 @@
 import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
+import COURSE from "./course.model";
 
 const GRADE = sequelize.define("Grade", {
   id: {
@@ -46,5 +47,7 @@ const GRADE = sequelize.define("Grade", {
 (async () => {
   await sequelize.sync();
 })();
+
+GRADE.belongsTo(COURSE, { foreignKey: 'courseId', as: 'course'});
 
 export default GRADE;
