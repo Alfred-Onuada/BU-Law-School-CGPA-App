@@ -262,6 +262,9 @@ export async function getStudents(req: Request, res: Response) {
     queryClause = {
       ...queryClause,
       ...currentLevelClause,
+      yearEnrolled: {
+        [Op.lte]: sessionStartYear,
+      },
     };
 
     const result = await STUDENT.findAndCountAll({
@@ -304,8 +307,41 @@ export async function getStudents(req: Request, res: Response) {
         : 0;
 
       // I need to run the calculation for CGPA
+      const levels = [100, 200, 300, 400, 500, 600].filter(level => level >= (student.get('levelAtEnrollment') as number));
 
-      return { ...studentData, semesterGPA: parseFloat(semesterGPA.toFixed(2)), CGPA: 0};
+      let cumulativeTotalGradePointsGained = 0;
+      let cumulativeTotalPossibleGradePoints = 0;
+
+      for (const lvl of levels) {
+        const levelGrades = await GRADE.findAll({
+          where: {
+            studentId: studentData.id,
+            studentLevel: lvl,
+          },
+          include: [{
+            model: COURSE,
+            as: 'course',
+            required: true,
+          }]
+        });
+
+        const allCoursesWithinLevel = await COURSE.findAll({
+          where: {
+            level: lvl,
+          }
+        });
+
+        cumulativeTotalGradePointsGained += levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+        cumulativeTotalPossibleGradePoints += allCoursesWithinLevel.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+      }
+
+      console.log(cumulativeTotalGradePointsGained, cumulativeTotalPossibleGradePoints);
+
+      const CGPA = cumulativeTotalPossibleGradePoints > 0
+        ? (cumulativeTotalGradePointsGained / cumulativeTotalPossibleGradePoints) * 5
+        : 0;
+
+      return { ...studentData, semesterGPA: parseFloat(semesterGPA.toFixed(2)), CGPA: parseFloat(CGPA.toFixed(2)) };
     }));
 
     res
