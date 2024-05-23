@@ -12,6 +12,9 @@ import {
   createStudent,
   createStudentsBulk,
   getStudents,
+  getCourses,
+  saveCourses,
+  deleteCourse,
 } from '../controllers/api.controller';
 const router = Router();
 
@@ -38,5 +41,11 @@ router.post('/student', createStudent);
 router.post('/student/bulk', createStudentsBulk);
 
 router.get('/students', getStudents);
+
+router.get('/courses', getCourses);
+
+router.post('/courses', saveCourses);
+
+router.delete('/course/:courseId', deleteCourse);
 
 export default router;

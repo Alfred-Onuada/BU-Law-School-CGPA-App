@@ -61,7 +61,7 @@ export class LevelsComponent implements OnInit {
                     this.showError = false;
                     this.errorMessage = '';
                     this.loading = false;
-                }, 5000);
+                }, 3000);
             },
             complete: () => {
                 this.semesterAndSessionDetailsSub$.unsubscribe();
@@ -83,7 +83,7 @@ export class LevelsComponent implements OnInit {
                     this.showError = false;
                     this.errorMessage = '';
                     this.loading = false;
-                }, 5000);
+                }, 3000);
             },
             complete: () => {
                 this.levelsSub$.unsubscribe();

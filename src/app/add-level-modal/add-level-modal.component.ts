@@ -39,7 +39,7 @@ export class AddLevelModalComponent {
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-      }, 5000);
+      }, 3000);
       return;
     }
 
@@ -53,7 +53,7 @@ export class AddLevelModalComponent {
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
-          }, 5000);
+          }, 3000);
         },
         error: (error) => {
           console.error(error);
@@ -63,7 +63,7 @@ export class AddLevelModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-          }, 5000);
+          }, 3000);
         }
       });
   }

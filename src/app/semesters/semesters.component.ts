@@ -62,7 +62,7 @@ export class SemestersComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.semestersSub$.unsubscribe();

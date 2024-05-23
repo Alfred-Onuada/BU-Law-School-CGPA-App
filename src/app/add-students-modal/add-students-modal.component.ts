@@ -50,7 +50,7 @@ export class AddStudentsModalComponent {
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
-          }, 5000);
+          }, 3000);
         },
         error: (error) => {
           console.error(error);
@@ -60,7 +60,7 @@ export class AddStudentsModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-          }, 5000);
+          }, 3000);
         }
       });
   }
@@ -93,7 +93,7 @@ export class AddStudentsModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-          }, 5000);
+          }, 3000);
         }
       });
     }
@@ -107,7 +107,7 @@ export class AddStudentsModalComponent {
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-      }, 5000);
+      }, 3000);
       return;
     }
 
@@ -126,7 +126,7 @@ export class AddStudentsModalComponent {
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
-          }, 5000);
+          }, 3000);
         },
         error: (error) => {
           console.error(error);
@@ -136,7 +136,7 @@ export class AddStudentsModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-          }, 5000);
+          }, 3000);
         }
       });
   }

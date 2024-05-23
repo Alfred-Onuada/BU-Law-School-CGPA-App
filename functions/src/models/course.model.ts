@@ -15,19 +15,16 @@ const COURSE = sequelize.define("Course", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
-  levelId: {
-    type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,
+  level: {
+    type: DataTypes.INTEGER,
     allowNull: false,
   },
   semesterId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
   sessionId: {
     type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
   },
 }, {timestamps: true});

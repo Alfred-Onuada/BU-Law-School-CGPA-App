@@ -40,7 +40,7 @@ export class AddSessionModalComponent {
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-      }, 5000);
+      }, 3000);
       return;
     }
 
@@ -54,7 +54,7 @@ export class AddSessionModalComponent {
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
-          }, 5000);
+          }, 3000);
         },
         error: (error) => {
           console.error(error);
@@ -64,7 +64,7 @@ export class AddSessionModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-          }, 5000);
+          }, 3000);
         }
       });
   }

@@ -5,6 +5,7 @@ import LEVEL from "../models/level.model";
 import STUDENT from "../models/student.model";
 import { Op } from "sequelize";
 import sequelize from "sequelize/lib/sequelize";
+import COURSE from "../models/course.model";
 
 export async function getSessions(_: Request, res: Response) {
   try {
@@ -262,6 +263,76 @@ export async function getStudents(req: Request, res: Response) {
     }));
 
     res.status(200).json({ message: "Success", data: { students: studentsWithGPA, total: result.count } });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getCourses(req: Request, res: Response) {
+  try {
+    const { sessionId, semesterId, level } = req.query;
+
+    if (!sessionId || !semesterId || !level) {
+      res.status(400).json({ message: "Invalid query" });
+      return;
+    }
+
+    const courses = await COURSE.findAll({
+      where: { sessionId, semesterId, level },
+      order: [["name", "ASC"]],
+    });
+
+    res.status(200).json({ message: "Success", data: courses });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function saveCourses(req: Request, res: Response) {
+  try {
+    const courses = req.body;
+
+    if (!Array.isArray(courses) || courses.length === 0) {
+      res.status(400).json({ message: "Invalid data" });
+      return;
+    }
+
+    // remove the id field from any course without an id
+    courses.forEach(course => {
+      if (!course.id) {
+        delete course.id;
+      }
+    });
+
+    // this is how upsert works in sequelize, the fields array is used to specify the fields to update
+    // the updateOnDuplicate option is used to specify the fields to update when the primary key already exists
+    await COURSE.bulkCreate(courses, { updateOnDuplicate: ["name", "units"] });
+
+    res.status(201).json({ message: "Success" });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function deleteCourse(req: Request, res: Response) {
+  try {
+    const { courseId } = req.params;
+
+    if (!courseId) {
+      res.status(400).json({ message: "Invalid query" });
+      return;
+    }
+
+    const course = await COURSE.findByPk(courseId);
+
+    if (!course) {
+      res.status(404).json({ message: "Course not found" });
+      return;
+    }
+
+    await course.destroy();
+
+    res.status(200).json({ message: "Success" });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

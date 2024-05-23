@@ -1,5 +1,8 @@
 export interface ICourse {
-  _id: string;
+  id: string;
   name: string;
   units: number;
+  sessionId: string;
+  semesterId: string;
+  level: number;
 }

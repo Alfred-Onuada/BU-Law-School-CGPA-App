@@ -38,23 +38,32 @@
       </div>
       <!-- Modal body -->
       <div class="p-4 md:p-5">
-        <div class="flex justify-between">
-          <select name="level" class="w-[300px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
-            <option value="" selected disabled>Select Level</option>
-            <option>100 Level</option>
-            <option>200 Level</option>
-            <option>300 Level</option>
-            <option>400 Level</option>
-            <option>500 Level</option>
-            <option>600 Level</option>
-          </select>
-          <select name="semester" class="w-[300px] bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
-            <option value="" selected disabled>Select Semester</option>
-            <option>First Semester</option>
-            <option>Second Semester</option>
-            <option>Summer Semester</option>
-          </select>
+        <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{errorMessage}}</span>       
         </div>
+
+        <div *ngIf="showSuccess" class="mb-5 w-[100%] shake bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{successMessage}}</span>       
+        </div>
+
+        <label for="session">Select a Session</label>
+        <select id="session" [(ngModel)]="sessionId" class="w-full mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+          <option *ngFor="let session of sessions" [value]="session.id">{{session.name}}</option>
+        </select>
+
+        <label for="session">Select a Semester</label>
+        <select id="semester" [(ngModel)]="semesterId" class="w-full mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+          <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}</option>
+        </select>
+
+        <label for="level">Select a level</label>
+        <select id="level" [(ngModel)]="level" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
+          <option *ngFor="let level of levels" [value]="level.name">{{level.name}}</option>
+        </select>
+
+        <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5" type="button" (click)="fetchCourses()">
+          Fetch Courses
+        </button>
 
         <div class="flex my-5">
           <h4 class="w-[50vw] mr-5">Course</h4>
@@ -62,17 +71,21 @@
         </div>
 
         <div class="overflow-y-auto max-h-[60vh] pr-4">
-          <div class="flex items-center mb-3" *ngFor="let course of courses">
+          <div class="flex items-center mb-3" *ngFor="let idx = index; let course of courses">
             <input
               type="text"
               [value]="course.name"
+              (change)="updateCourse($event, idx, 'name')"
               class="border-gray-200 border-[2px] px-2.5 py-2 w-[50vw] mr-5 rounded-md text-sm"
             />
-            <select class="mr-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2">
+            <select class="mr-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
+              (change)="updateCourse($event, idx, 'units')"
+              >
               <option *ngFor="let i of [1,2,3,4,5,6]" [selected]="course.units === i">{{i}}</option>
             </select>
             <a
               class="font-medium text-sm text-[#014282] hover:underline"
+              (click)="removeCourse(idx)"
               >Remove Course</a>
           </div>
         </div>
@@ -84,7 +97,7 @@
             Add course
           </button>
   
-          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5">
+          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5" (click)="saveCourses()">
             Save
           </button>
         </div>

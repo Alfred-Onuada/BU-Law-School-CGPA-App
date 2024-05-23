@@ -85,7 +85,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.semesterSub$.unsubscribe();
@@ -106,7 +106,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.sessionSub$.unsubscribe();
@@ -128,7 +128,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -159,7 +159,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -190,7 +190,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -217,7 +217,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -245,7 +245,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -270,7 +270,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
@@ -295,7 +295,7 @@ export class StudentsComponent implements OnInit {
           this.showError = false;
           this.errorMessage = '';
           this.loading = false;
-        }, 5000);
+        }, 3000);
       },
       complete: () => {
         this.studentsSub$.unsubscribe();
