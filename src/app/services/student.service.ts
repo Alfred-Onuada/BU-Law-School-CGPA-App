@@ -55,4 +55,10 @@ export class StudentService {
         )
       );
   }
+
+  getStudent(studentId: string): Observable<IStudent> {
+    return this.http
+      .get<IApiResponse>(`${environment.apiUrl}/student/${studentId}`)
+      .pipe(map((response) => response.data as IStudent));
+  }
 }

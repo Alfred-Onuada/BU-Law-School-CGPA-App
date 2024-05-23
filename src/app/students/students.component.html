@@ -67,13 +67,13 @@
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            {{ student.firstName + " " + student.lastName }}
+            {{ student.lastName + " " + student.firstName }}
           </th>
           <td class="px-6 py-4">{{student.semesterGPA}}</td>
           <td class="px-6 py-4">{{student.CGPA}}</td>
           <td class="px-6 py-4">
             <a
-              [routerLink]="['/grades']" [queryParams]="{}"
+              [routerLink]="['/grades']" [queryParams]="{ sessionId, semesterId, level, studentId: student.id }"
               class="font-medium text-[#014282] hover:underline"
               >View Grades</a
             >

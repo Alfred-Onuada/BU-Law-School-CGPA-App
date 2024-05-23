@@ -1,7 +1,5 @@
 <app-header></app-header>
 
-<app-edit-grades-modal></app-edit-grades-modal>
-
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
   <div class="flex justify-between items-center mb-5">
     <h2 class="text-xl font-semibold flex">
@@ -12,28 +10,29 @@
       <span
         class="mx-3 text-[#26A59A] cursor-pointer"
         [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId: studentCourseAndGrades.sessionId }"
-        >{{ studentCourseAndGrades.sessionTitle }}</span
+        [queryParams]="{ sessionId }"
+        >{{ session.name }}</span
       >
       <img src="assets/right-caret.svg" alt="Right Caret" />
       <span
         class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId: studentCourseAndGrades.sessionId }"
-        >{{ studentCourseAndGrades.semesterTitle }}</span
+        [routerLink]="['/level']"
+        [queryParams]="{ semesterId }"
+        >{{ semester.name }}</span
       >
       <img src="assets/right-caret.svg" alt="Right Caret" />
       <span
         class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/levels']"
+        [routerLink]="['/students']"
         [queryParams]="{
-          sessionId: studentCourseAndGrades.sessionId,
-          semesterId: studentCourseAndGrades.levelId
+          level,
+          semesterId,
+          sessionId,
         }"
-        >{{ studentCourseAndGrades.levelTitle }}</span
+        >{{ level }}</span
       >
       <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span class="mx-3">{{ studentCourseAndGrades.studentName }}</span>
+      <span class="mx-3">{{ student.lastName + ' ' + student.firstName }}</span>
     </h2>
   </div>
 
@@ -51,13 +50,13 @@
       <tbody>
         <tr
           class="odd:bg-white even:bg-gray-50 border-b"
-          *ngFor="let course of studentCourseAndGrades.courses"
+          *ngFor="let course of coursesAndGrade"
         >
           <th
             scope="row"
             class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
           >
-            {{ course.title }}
+            {{ course.name }}
           </th>
           <td class="px-6 py-4">{{ course.units }}</td>
           <td class="px-6 py-4">{{ course.score }}</td>
@@ -66,6 +65,7 @@
             <a
               data-modal-target="edit-grade-modal" data-modal-toggle="edit-grade-modal" type="button"
               class="font-medium text-[#014282] hover:underline"
+              (click)="openEditModal(course.courseId, course.score, course.name)"
               >Edit Grade</a
             >
           </td>

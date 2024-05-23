@@ -24,6 +24,22 @@ const GRADE = sequelize.define("Grade", {
   grade: {
     type: DataTypes.STRING,
     allowNull: false,
+  },
+  gradePoint: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  studentLevel: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  semesterId: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  sessionId: {
+    type: DataTypes.STRING,
+    allowNull: false,
   }
 }, {timestamps: true});
 

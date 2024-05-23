@@ -2,43 +2,153 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { HeaderComponent } from '../header/header.component';
-import { RouterLink } from '@angular/router';
-import { IStudentCourses } from '../interfaces/student-courses';
+import { Router, RouterLink } from '@angular/router';
 import { EditGradesModalComponent } from "../edit-grades-modal/edit-grades-modal.component";
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { ISemester } from '../interfaces/semester';
+import { ISession } from '../interfaces/session';
+import { IStudent } from '../interfaces/students';
+import { Subscription } from 'rxjs';
+import { SessionService } from '../services/session.service';
+import { SemestersService } from '../services/semesters.service';
+import { StudentService } from '../services/student.service';
+import { ICoursesAndGrade } from '../interfaces/courses-and-grades';
+import { GradesService } from '../services/grades.service';
 
 @Component({
     selector: 'app-courses',
     standalone: true,
     templateUrl: './courses.component.html',
     styleUrls: ['./courses.component.css'],
-    imports: [CommonModule, HeaderComponent, RouterLink, EditGradesModalComponent]
+    imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
 export class CoursesComponent {
-  constructor(private titleService: Title) {
+  sessionId!: string;
+  semesterId!: string;
+  level!: string;
+  studentId!: string;
+
+  session!: ISession;
+  semester!: ISemester;
+  student!: IStudent;
+  coursesAndGrade: ICoursesAndGrade[] = [];
+
+  sessionSub$!: Subscription;
+  semesterSub$!: Subscription;
+  studentSub$!: Subscription;
+  coursesAndGradeSub$!: Subscription;
+
+  showError = false;
+  errorMessage = '';
+  loading = true;
+
+  constructor(
+    private router: Router,
+    private titleService: Title,
+    public dialog: MatDialog,
+    private sessionService: SessionService,
+    private semesterService: SemestersService,
+    private studentService: StudentService,
+    private gradeService: GradesService
+    // I will need a grade service
+  ) {
+    // fetch Ids from route params
+    this.sessionId = this.router.parseUrl(this.router.url).queryParams['sessionId'];
+    this.semesterId = this.router.parseUrl(this.router.url).queryParams['semesterId'];
+    this.level = this.router.parseUrl(this.router.url).queryParams['level'];
+    this.studentId = this.router.parseUrl(this.router.url).queryParams['studentId'];
+
+    // fetch session, semester and student
+    this.sessionSub$ = this.sessionService.getSession(this.sessionId).subscribe({
+      next: (session) => {
+        this.session = session;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 3000);
+      },
+      complete: () => {
+        this.sessionSub$.unsubscribe();
+      }
+    })
+
+    this.semesterSub$ = this.semesterService.getSemester(this.semesterId).subscribe({
+      next: (semester) => {
+        this.semester = semester;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 3000);
+      },
+      complete: () => {
+        this.semesterSub$.unsubscribe();
+      }
+    })
+
+    this.studentSub$ = this.studentService.getStudent(this.studentId).subscribe({
+      next: (student) => {
+        this.student = student;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 3000);
+      },
+      complete: () => {
+        this.studentSub$.unsubscribe();
+      }
+    })
+
+    this.coursesAndGradeSub$ = this.gradeService.getCoursesAndGrade(this.sessionId, this.semesterId, this.level, this.studentId).subscribe({
+      next: (result) => {
+        this.coursesAndGrade = result;
+      },
+      error: (error) => {
+        console.error(error);
+
+        this.showError = true;
+        this.errorMessage = error.message;
+
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+          this.loading = false;
+        }, 3000);
+      },
+      complete: () => {
+        this.coursesAndGradeSub$.unsubscribe();
+      }
+    });
+
     this.titleService.setTitle(
       'Courses - Babcock University School of Law and Security Studies'
     );
   }
 
-  studentCourseAndGrades: IStudentCourses = {
-    levelTitle: '100 Level',
-    levelId: '1',
-    semesterId: '1',
-    semesterTitle: 'First Semester',
-    sessionId: '1',
-    sessionTitle: '2023/2024',
-    studentName: 'Michael Johnson',
-    courses: [
-      { _id: '1', title: 'Introduction to Law', units: 3, score: 88, grade: 'A' },
-      { _id: '2', title: 'Criminal Justice System', units: 1, score: 76, grade: 'B' },
-      { _id: '3', title: 'Constitutional Law', units: 3, score: 92, grade: 'A' },
-      { _id: '4', title: 'Torts', units: 3, score: 85, grade: 'B' },
-      { _id: '5', title: 'Civil Procedure', units: 2, score: 90, grade: 'A' },
-      { _id: '6', title: 'Legal Writing', units: 2, score: 82, grade: 'B' },
-      { _id: '7', title: 'Contracts', units: 1, score: 95, grade: 'A' },
-      { _id: '8', title: 'Property Law', units: 3, score: 88, grade: 'A' },
-      { _id: '9', title: 'Criminal Law', units: 1, score: 85, grade: 'B' },
-      { _id: '10', title: 'Evidence', units: 2, score: 92, grade: 'A' },
-    ],
-  };
+  openEditModal(courseId: string, score: string, courseName: string) {
+    this.dialog.open(EditGradesModalComponent, { data: { courseId, score, courseName } });
+  }
 }
