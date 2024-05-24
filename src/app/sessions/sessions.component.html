@@ -9,7 +9,13 @@
       Create New Session
     </button>
   </div>
-  <div class="grid grid-cols-2 gap-5">
+  <div *ngIf="loading" class="flex justify-center items-center h-[70vh]">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
+    </div>
+  </div>
+  <div class="grid grid-cols-2 gap-5" *ngIf="!loading">
     <div *ngFor="let session of sessions" class="bg-[#26A59A12] flex justify-center items-center h-[100px] cursor-pointer"
       [routerLink]="['/semesters']" [queryParams]="{'sessionId': session.id}">
       <h4 class="text-3xl font-semibold text-[green]">{{session.name}}</h4>
