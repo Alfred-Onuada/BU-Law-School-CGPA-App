@@ -69,8 +69,9 @@
               />
             </div>
           </div>
-          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3" type="submit">
+          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3 flex items-center" type="submit">
             Save
+            <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="loading"></div>
           </button>
         </form>
       </div>
