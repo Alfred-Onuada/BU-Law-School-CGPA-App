@@ -17,6 +17,7 @@ export class AddSemesterModalComponent {
   errorMessage = '';
   showSuccess = false;
   successMessage = '';
+  loading = false;
   
   constructor(
     private semestersService: SemestersService,
@@ -33,9 +34,13 @@ export class AddSemesterModalComponent {
   }
 
   handleSubmit() {
+    this.loading = true;
+
     if (!this.form.valid) {
       this.showError = true;
       this.errorMessage = 'Please fill in all fields correctly';
+
+      this.loading = false;
 
       setTimeout(() => {
         this.showError = false;
@@ -51,6 +56,8 @@ export class AddSemesterModalComponent {
           this.showSuccess = true;
           this.successMessage = 'Semester created successfully';
 
+          this.loading = false;
+
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
@@ -60,6 +67,8 @@ export class AddSemesterModalComponent {
           console.error(error);
           this.showError = true;
           this.errorMessage = error.message;
+
+          this.loading = false;
 
           setTimeout(() => {
             this.showError = false;
