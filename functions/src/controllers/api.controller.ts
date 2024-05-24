@@ -39,7 +39,7 @@ export async function getSemesters(req: Request, res: Response) {
       return;
     }
 
-    const semesters = await SEMESTER.findAll({ where: { sessionId } });
+    const semesters = await SEMESTER.findAll({ where: { sessionId }, order: [['createdAt', 'DESC']]});
 
     res.status(200).json({ message: 'Success', data: { semesters, session } });
   } catch (error: any) {

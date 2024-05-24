@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../header/header.component";
 import { Router, RouterLink } from '@angular/router';
@@ -18,10 +18,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     styleUrls: ['./levels.component.css'],
     imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
-export class LevelsComponent implements OnInit {
+export class LevelsComponent {
     levels: ILevel[] = [];
     levelsSub$!: Subscription;
-    loading = true;
+    semesterandSessionDetailsloading = true;
+    levelLoading = true;
     showError = false;
     errorMessage = '';
     semesterId = '';
@@ -37,19 +38,15 @@ export class LevelsComponent implements OnInit {
         public dialog: MatDialog
     ) {
         this.titleService.setTitle("Levels - Babcock University School of Law and Security Studies");
-    }
 
-    openAddLevelModal() {
-        this.dialog.open(AddLevelModalComponent);
-    }
-
-    ngOnInit(): void {
         this.semesterId = this.router.parseUrl(this.router.url).queryParams['semesterId'];
         
         this.semesterAndSessionDetailsSub$ = this.levelService.getSemesterAndSessionDetails(this.semesterId).subscribe({
             next: ({semester, session}) => {
                 this.semester = semester;
                 this.session = session;
+
+                this.semesterandSessionDetailsloading = false;
             },
             error: (error) => {
                 console.error(error);
@@ -60,7 +57,7 @@ export class LevelsComponent implements OnInit {
                 setTimeout(() => {
                     this.showError = false;
                     this.errorMessage = '';
-                    this.loading = false;
+                    this.semesterandSessionDetailsloading = false;
                 }, 3000);
             },
             complete: () => {
@@ -71,7 +68,7 @@ export class LevelsComponent implements OnInit {
         this.levelsSub$ = this.levelService.getLevels().subscribe({
             next: (levels) => {
                 this.levels = levels;
-                this.loading = false;
+                this.levelLoading = false;
             },
             error: (error) => {
                 console.error(error);
@@ -82,12 +79,16 @@ export class LevelsComponent implements OnInit {
                 setTimeout(() => {
                     this.showError = false;
                     this.errorMessage = '';
-                    this.loading = false;
+                    this.levelLoading = false;
                 }, 3000);
             },
             complete: () => {
                 this.levelsSub$.unsubscribe();
             }
         });
+    }
+
+    openAddLevelModal() {
+        this.dialog.open(AddLevelModalComponent);
     }
 }

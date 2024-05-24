@@ -1,13 +1,13 @@
 <app-header></app-header>
 
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
-  <div *ngIf="loading" class="flex justify-center items-center h-[70vh]">
+  <div *ngIf="semesterandSessionDetailsloading || levelLoading" class="flex justify-center items-center h-[70vh]">
     <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
     <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
       <span class="block sm:inline">{{errorMessage}}</span>       
     </div>
   </div>
-  <div *ngIf="!loading && session && semester">
+  <div *ngIf="!(semesterandSessionDetailsloading || levelLoading) && session && semester">
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-xl font-semibold flex">
         <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/">Sessions</span>
