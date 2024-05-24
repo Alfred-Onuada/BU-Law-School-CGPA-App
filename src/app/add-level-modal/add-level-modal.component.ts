@@ -17,6 +17,7 @@ export class AddLevelModalComponent {
   errorMessage = '';
   showSuccess = false;
   successMessage = '';
+  loading = false;
   
   constructor(
     private levelService: LevelService,
@@ -32,9 +33,13 @@ export class AddLevelModalComponent {
   }
 
   handleSubmit() {
+    this.loading = true;
+
     if (!this.form.valid) {
       this.showError = true;
       this.errorMessage = 'Please fill in all fields correctly';
+
+      this.loading = false;
 
       setTimeout(() => {
         this.showError = false;
@@ -50,6 +55,8 @@ export class AddLevelModalComponent {
           this.showSuccess = true;
           this.successMessage = 'Level created successfully';
 
+          this.loading = false;
+
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
@@ -59,6 +66,8 @@ export class AddLevelModalComponent {
           console.error(error);
           this.showError = true;
           this.errorMessage = error.message;
+
+          this.loading = false;
 
           setTimeout(() => {
             this.showError = false;
