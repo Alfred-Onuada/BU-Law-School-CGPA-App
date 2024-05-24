@@ -18,8 +18,8 @@ import { GradesService } from '../services/grades.service';
 @Component({
     selector: 'app-courses',
     standalone: true,
-    templateUrl: './courses.component.html',
-    styleUrls: ['./courses.component.css'],
+    templateUrl: './grades.component.html',
+    styleUrls: ['./grades.component.css'],
     imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
 export class CoursesComponent {
