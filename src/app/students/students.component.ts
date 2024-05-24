@@ -37,7 +37,13 @@ export class StudentsComponent implements OnInit {
 
   showError = false;
   errorMessage = '';
-  loading = true;
+  semesterLoading = true;
+  sessionLoading = true;
+  studentLoading = true;
+  paginationLoading = false;
+  searchLoading = false;
+  exportResultsLoading = false;
+  exportAllStudentsLoading = false;
 
   private query: string = '';
 
@@ -74,6 +80,8 @@ export class StudentsComponent implements OnInit {
     this.semesterSub$ = this.semesterService.getSemester(this.semesterId).subscribe({
       next: (semester) => {
         this.semester = semester;
+
+        this.semesterLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -84,7 +92,7 @@ export class StudentsComponent implements OnInit {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.semesterLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -95,6 +103,8 @@ export class StudentsComponent implements OnInit {
     this.sessionSub$ = this.sessionService.getSession(this.sessionId).subscribe({
       next: (session) => {
         this.session = session;
+
+        this.sessionLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -105,7 +115,7 @@ export class StudentsComponent implements OnInit {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.sessionLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -117,6 +127,8 @@ export class StudentsComponent implements OnInit {
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
+
+        this.studentLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -127,7 +139,7 @@ export class StudentsComponent implements OnInit {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.studentLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -141,24 +153,27 @@ export class StudentsComponent implements OnInit {
       return;
     }
 
+    this.paginationLoading = true;
     this.currentPage--;
-    this.loading = true;
 
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
+
+        this.paginationLoading = false;
       },
       error: (error) => {
         console.error(error);
 
         this.showError = true;
         this.errorMessage = error.message;
+        
+        this.paginationLoading = false;
 
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -173,23 +188,26 @@ export class StudentsComponent implements OnInit {
     }
 
     this.currentPage++;
-    this.loading = true;
+    this.paginationLoading = true;
 
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
+
+        this.paginationLoading = false;
       },
       error: (error) => {
         console.error(error);
 
         this.showError = true;
         this.errorMessage = error.message;
+        
+        this.paginationLoading = false;
 
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -199,24 +217,27 @@ export class StudentsComponent implements OnInit {
   }
 
   searchStudents() {
-    this.loading = true;
+    this.searchLoading = true;
 
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, 0, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
         this.currentPage = 1;
+
+        this.searchLoading = false;
       },
       error: (error) => {
         console.error(error);
 
         this.showError = true;
         this.errorMessage = error.message;
+        
+        this.searchLoading = false;
 
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -227,24 +248,27 @@ export class StudentsComponent implements OnInit {
 
   resetSearch() {
     this.query = '';
-    this.loading = true;
+    this.searchLoading = true;
 
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, 0, this.query).subscribe({
       next: (result) => {
         this.students = result.students;
         this.totalPages = Math.ceil(result.total / this.pageSize);
         this.currentPage = 1;
+
+        this.searchLoading = false;
       },
       error: (error) => {
         console.error(error);
 
         this.showError = true;
         this.errorMessage = error.message;
+        
+        this.searchLoading = false;
 
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -254,11 +278,15 @@ export class StudentsComponent implements OnInit {
   }
 
   exportAllStudents() {
+    this.exportAllStudentsLoading = true;
+
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, -1, 0, this.query).subscribe({
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);
         this.downloadCSV(blob, 'students-full.csv');
+
+        this.exportAllStudentsLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -266,10 +294,11 @@ export class StudentsComponent implements OnInit {
         this.showError = true;
         this.errorMessage = error.message;
 
+        this.exportAllStudentsLoading = false;
+
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -279,11 +308,15 @@ export class StudentsComponent implements OnInit {
   }
 
   exportResults() {
+    this.exportResultsLoading = true;
+
     this.studentsSub$ = this.studentService.getStudents(this.sessionId, +this.level, this.semesterId, this.pageSize, this.currentPage, this.query).subscribe({
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);
         this.downloadCSV(blob, `students (${this.query}).csv`);
+
+        this.exportResultsLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -291,10 +324,11 @@ export class StudentsComponent implements OnInit {
         this.showError = true;
         this.errorMessage = error.message;
 
+        this.exportResultsLoading = false;
+
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {

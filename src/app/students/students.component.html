@@ -1,85 +1,105 @@
 <app-header></app-header>
 
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
-  <div class="flex justify-between items-center mb-5">
-    <h2 class="text-xl font-semibold flex">
-      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
-        >Sessions</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span
-        class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId: sessionId }"
-        >{{ session.name }}</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span
-        class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/level']"
-        [queryParams]="{ semesterId: semesterId }"
-        >{{ semester.name }}</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span class="mx-3">{{ level }}</span>
-    </h2>
-  </div>
-
-  <div class="flex justify-between mb-5">
-    <div>
-      <input type="search" name="search" placeholder="Search something"
-        class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md"
-        [(ngModel)]="searchTerm">
-      <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3"
-        (click)="resetSearch()">Reset</button>
-      <button *ngIf="!searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md"
-        (click)="exportAllStudents()">Export all Students</button>
-      <button *ngIf="searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md"
-        (click)="exportResults()">Export Results</button>
-    </div>
-    <div class="flex items-center">
-      <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180 cursor-pointer" (click)="prevPage()">
-      <span class="mx-3 text-sm">Page {{currentPage}} of {{totalPages}}</span>
-      <img src="assets/right-caret.svg" alt="Flip caret" class="cursor-pointer" (click)="nextPage()">
+  <div *ngIf="semesterLoading || sessionLoading || studentLoading" class="flex justify-center items-center h-[70vh]">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
     </div>
   </div>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table
-      class="w-full text-sm text-left rtl:text-right text-gray-500"
-    >
-      <thead
-        class="text-xs text-gray-700 uppercase bg-gray-50"
-      >
-        <tr>
-          <th scope="col" class="px-6 py-3">Student name</th>
-          <th scope="col" class="px-6 py-3">Semester GPA</th>
-          <th scope="col" class="px-6 py-3">CGPA</th>
-          <th scope="col" class="px-6 py-3"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="odd:bg-white even:bg-gray-50 border-b"
-          *ngFor="let student of students"
+  <div *ngIf="!(semesterLoading || sessionLoading || studentLoading) && session && semester">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-xl font-semibold flex">
+        <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
+          >Sessions</span
         >
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span
+          class="mx-3 text-[#26A59A] cursor-pointer"
+          [routerLink]="['/semesters']"
+          [queryParams]="{ sessionId: sessionId }"
+          >{{ session.name }}</span
+        >
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span
+          class="mx-3 text-[#26A59A] cursor-pointer"
+          [routerLink]="['/level']"
+          [queryParams]="{ semesterId: semesterId }"
+          >{{ semester.name }}</span
+        >
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span class="mx-3">{{ level }}</span>
+      </h2>
+    </div>
+  
+    <div class="flex justify-between mb-5">
+      <div class="flex items-center relative">
+        <input type="search" name="search" placeholder="Search something"
+          class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md"
+          [(ngModel)]="searchTerm">
+        <div class="loader ease-linear rounded-full bg-white border-2 border-t-2 h-7 w-7 absolute top-[7px] left-[460px]" *ngIf="searchLoading"></div>
+        <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3"
+          (click)="resetSearch()">Reset</button>
+        <button *ngIf="!searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center"
+          (click)="exportAllStudents()">
+          Export all Students
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-7 w-7 ml-4" *ngIf="exportAllStudentsLoading"></div>
+        </button>
+        <button *ngIf="searchTerm.length" class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center"
+          (click)="exportResults()">
+          Export Results
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-7 w-7 ml-4" *ngIf="exportResultsLoading"></div>
+        </button>
+      </div>
+      <div class="flex items-center">
+        <img src="assets/right-caret.svg" alt="Flip caret" class="rotate-180 cursor-pointer" (click)="prevPage()">
+        <span class="mx-3 text-sm">Page {{currentPage}} of {{totalPages}}</span>
+        <img src="assets/right-caret.svg" alt="Flip caret" class="cursor-pointer" (click)="nextPage()">
+      </div>
+    </div>
+
+    <div class="w-full flex justify-center mb-5">
+      <div class="loader ease-linear rounded-full border-4 border-t-4 h-16 w-16" *ngIf="paginationLoading"></div>
+    </div>
+  
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table
+        class="w-full text-sm text-left rtl:text-right text-gray-500"
+      >
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-50"
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">Student name</th>
+            <th scope="col" class="px-6 py-3">Semester GPA</th>
+            <th scope="col" class="px-6 py-3">CGPA</th>
+            <th scope="col" class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="odd:bg-white even:bg-gray-50 border-b"
+            *ngFor="let student of students"
           >
-            {{ student.lastName + " " + student.firstName }}
-          </th>
-          <td class="px-6 py-4">{{student.semesterGPA}}</td>
-          <td class="px-6 py-4">{{student.CGPA}}</td>
-          <td class="px-6 py-4">
-            <a
-              [routerLink]="['/grades']" [queryParams]="{ sessionId, semesterId, level, studentId: student.id }"
-              class="font-medium text-[#014282] hover:underline"
-              >View Grades</a
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              {{ student.lastName + " " + student.firstName }}
+            </th>
+            <td class="px-6 py-4">{{student.semesterGPA}}</td>
+            <td class="px-6 py-4">{{student.CGPA}}</td>
+            <td class="px-6 py-4">
+              <a
+                [routerLink]="['/grades']" [queryParams]="{ sessionId, semesterId, level, studentId: student.id }"
+                class="font-medium text-[#014282] hover:underline"
+                >View Grades</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
