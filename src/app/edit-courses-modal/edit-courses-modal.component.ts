@@ -29,6 +29,13 @@ export class EditCoursesModalComponent {
   levels: ILevel[] = [];
   levelsSub$!: Subscription;
 
+  sessionLoading = true;
+  semesterLoading = false;
+  levelLoading = true;
+  fetchingCourses = false;
+  saveCoursesLoading = false;
+  removeCoursesLoading = false;
+
   private selectedSessionId!: string;
   private selectedLevel!: string;
   private selectedSemesterId!: string;
@@ -63,7 +70,6 @@ export class EditCoursesModalComponent {
     this.courses = [];
   }
 
-  loading = false;
   showError = false;
   errorMessage = '';
   showSuccess = false;
@@ -80,9 +86,12 @@ export class EditCoursesModalComponent {
     this.sessionsSub$ = this.sessionService.getSessions().subscribe({
       next: (session) => {
         this.sessions = session;
+
+        this.sessionLoading = false;
       },
       error: (error) => {
         console.error(error);
+        this.sessionLoading = false;
 
         this.showError = true;
         this.errorMessage = error.message;
@@ -90,7 +99,6 @@ export class EditCoursesModalComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -101,9 +109,13 @@ export class EditCoursesModalComponent {
     this.levelsSub$ = this.levelService.getLevels().subscribe({
       next: (level) => {
         this.levels = level;
+
+        this.levelLoading = false;
       },
       error: (error) => {
         console.error(error);
+
+        this.levelLoading = false;
 
         this.showError = true;
         this.errorMessage = error.message;
@@ -111,7 +123,6 @@ export class EditCoursesModalComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -121,14 +132,20 @@ export class EditCoursesModalComponent {
   }
 
   fetchSemesters() {
+    this.semesterLoading = true;
+
     this.semestersSub$ = this.semsterService
       .getSemesters(this.sessionId)
       .subscribe({
         next: ({semesters}) => {
           this.semesters = semesters;
+
+          this.semesterLoading = false;
         },
         error: (error) => {
           console.error(error);
+
+          this.semesterLoading = false;
 
           this.showError = true;
           this.errorMessage = error.message;
@@ -136,7 +153,6 @@ export class EditCoursesModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-            this.loading = false;
           }, 3000);
         },
         complete: () => {
@@ -157,7 +173,6 @@ export class EditCoursesModalComponent {
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-        this.loading = false;
       }, 3000);
       return;
     }
@@ -173,19 +188,20 @@ export class EditCoursesModalComponent {
   }
 
   fetchCourses() {
+    this.fetchingCourses = true;
+
     if (!this.sessionId || !this.semesterId || !this.level) {
       this.showError = true;
       this.errorMessage = 'Please select a session, semester and level';
 
+      this.fetchingCourses = false;
+
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-        this.loading = false;
       }, 3000);
       return;
     }
-
-    this.loading = true;
 
     this.coursesSub$ = this.coursesService
       .getCourses(this.sessionId, this.semesterId, +this.level)
@@ -193,17 +209,20 @@ export class EditCoursesModalComponent {
         next: (courses) => {
           this.courses = courses;
 
+          this.fetchingCourses = false;
+
           this.showSuccess = true;
           this.successMessage = this.courses.length === 0 ? 'No courses yet, go ahead and add some' : 'Courses fetched successfully';
 
           setTimeout(() => {
             this.showSuccess = false;
             this.successMessage = '';
-            this.loading = false;
           }, 3000);
         },
         error: (error) => {
           console.error(error);
+
+          this.fetchingCourses = false;
 
           this.showError = true;
           this.errorMessage = error.message;
@@ -211,7 +230,6 @@ export class EditCoursesModalComponent {
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
-            this.loading = false;
           }, 3000);
         },
         complete: () => {
@@ -221,14 +239,17 @@ export class EditCoursesModalComponent {
   }
 
   saveCourses() {
+    this.saveCoursesLoading = true;
+
     if (this.courses.length === 0) {
       this.showError = true;
       this.errorMessage = 'No courses to save, please add some courses and try again';
 
+      this.saveCoursesLoading = false;
+
       setTimeout(() => {
         this.showError = false;
         this.errorMessage = '';
-        this.loading = false;
       }, 3000);
 
       return;
@@ -239,10 +260,11 @@ export class EditCoursesModalComponent {
         this.showSuccess = true;
         this.successMessage = 'Courses saved successfully';
 
+        this.saveCoursesLoading = false;
+
         setTimeout(() => {
           this.showSuccess = false;
           this.successMessage = '';
-          this.loading = false;
         }, 3000);
       },
       error: (error) => {
@@ -251,10 +273,11 @@ export class EditCoursesModalComponent {
         this.showError = true;
         this.errorMessage = error.message;
 
+        this.saveCoursesLoading = false;
+
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {
@@ -272,6 +295,8 @@ export class EditCoursesModalComponent {
   }
 
   removeCourse(idx: number) {
+    this.removeCoursesLoading = true;
+
     // if course has not been saved yet
     if (this.courses[idx].id == '') {
       this.courses = this.courses.filter((course, index) => index !== idx);
@@ -279,10 +304,11 @@ export class EditCoursesModalComponent {
       this.showSuccess = true;
       this.successMessage = 'Course removed successfully';
 
+      this.removeCoursesLoading = false;
+
       setTimeout(() => {
         this.showSuccess = false;
         this.successMessage = '';
-        this.loading = false;
       }, 3000);
 
       return;
@@ -296,10 +322,11 @@ export class EditCoursesModalComponent {
         this.showSuccess = true;
         this.successMessage = 'Course removed successfully';
 
+        this.removeCoursesLoading = false;
+
         setTimeout(() => {
           this.showSuccess = false;
           this.successMessage = '';
-          this.loading = false;
         }, 3000);
       },
       error: (error) => {
@@ -308,10 +335,11 @@ export class EditCoursesModalComponent {
         this.showError = true;
         this.errorMessage = error.message;
 
+        this.removeCoursesLoading = false;
+
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
         }, 3000);
       },
       complete: () => {

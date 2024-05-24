@@ -46,47 +46,60 @@
           <span class="block sm:inline">{{successMessage}}</span>       
         </div>
 
-        <label for="session">Select a Session</label>
+        <div class="flex items-center">
+          <label for="session">Select a Session</label>
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="sessionLoading"></div>
+        </div>
         <select id="session" [(ngModel)]="sessionId" class="w-full mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
           <option *ngFor="let session of sessions" [value]="session.id">{{session.name}}</option>
         </select>
 
-        <label for="session">Select a Semester</label>
+        <div class="flex items-center">
+          <label for="session">Select a Semester</label>
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="semesterLoading"></div>
+        </div>
         <select id="semester" [(ngModel)]="semesterId" class="w-full mb-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
           <option *ngFor="let semester of semesters" [value]="semester.id">{{semester.name}}</option>
         </select>
 
-        <label for="level">Select a level</label>
+        <div class="flex items-center">
+          <label for="level">Select a level</label>
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="levelLoading"></div>
+        </div>
         <select id="level" [(ngModel)]="level" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5">
           <option *ngFor="let level of levels" [value]="level.name">{{level.name}}</option>
         </select>
 
-        <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5" type="button" (click)="fetchCourses()">
+        <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5 flex items-center" type="button" (click)="fetchCourses()">
           Fetch Courses
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="fetchingCourses"></div>
         </button>
 
         <div class="flex my-5">
           <h4 class="w-[50vw] mr-5">Course</h4>
           <h4>Unit</h4>
+          <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="removeCoursesLoading"></div>
         </div>
 
-        <div class="overflow-y-auto max-h-[60vh] pr-4">
-          <div class="flex items-center mb-3" *ngFor="let idx = index; let course of courses">
-            <input
-              type="text"
-              [value]="course.name"
-              (change)="updateCourse($event, idx, 'name')"
-              class="border-gray-200 border-[2px] px-2.5 py-2 w-[50vw] mr-5 rounded-md text-sm"
-            />
-            <select class="mr-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
-              (change)="updateCourse($event, idx, 'units')"
-              >
-              <option *ngFor="let i of [1,2,3,4,5,6]" [selected]="course.units === i">{{i}}</option>
-            </select>
-            <a
-              class="font-medium text-sm text-[#014282] hover:underline"
-              (click)="removeCourse(idx)"
-              >Remove Course</a>
+        <div *ngIf="!fetchingCourses">
+          <div class="overflow-y-auto max-h-[60vh] pr-4">
+            <div class="flex items-center mb-3" *ngFor="let idx = index; let course of courses">
+              <input
+                type="text"
+                [value]="course.name"
+                (change)="updateCourse($event, idx, 'name')"
+                class="border-gray-200 border-[2px] px-2.5 py-2 w-[50vw] mr-5 rounded-md text-sm"
+              />
+              <select class="mr-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
+                (change)="updateCourse($event, idx, 'units')"
+                >
+                <option *ngFor="let i of [1,2,3,4,5,6]" [selected]="course.units === i">{{i}}</option>
+              </select>
+              <a
+                class="font-medium text-sm text-[#014282] hover:underline"
+                (click)="removeCourse(idx)"
+                >Remove Course</a>
+            </div>
           </div>
         </div>
 
@@ -97,8 +110,9 @@
             Add course
           </button>
   
-          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5" (click)="saveCourses()">
+          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5 flex items-center" (click)="saveCourses()">
             Save
+            <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="saveCoursesLoading"></div>
           </button>
         </div>
       </div>
