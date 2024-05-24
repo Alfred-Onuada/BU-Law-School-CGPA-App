@@ -3,30 +3,14 @@ config();
 
 import { Sequelize } from 'sequelize';
 
-let sequelize!: Sequelize;
-
-if (process.env.NODE_ENV === 'production') {
-  sequelize = new Sequelize(process.env.DB_URI as string, {
-    dialect: 'postgres',
-    dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
-      charset: 'utf8mb4',
-      collate: 'utf8mb4_unicode_ci' // allows case insensitive search
-    }
-  });
-} else {
-  sequelize = new Sequelize({
-    database: process.env.DEV_DB_NAME as string,
-    username: process.env.DEV_DB_USER as string,
-    password: process.env.DEV_DB_PASS as string,
-    host: process.env.DEV_DB_HOST as string,
-    dialect: 'mysql',
-  });
-
-}
+const sequelize = new Sequelize({
+  database: process.env.NODE_ENV === 'production' ? process.env.DB_NAME as string : process.env.DEV_DB_NAME as string,
+  username: process.env.NODE_ENV === 'production' ? process.env.DB_USER as string : process.env.DEV_DB_USER as string,
+  password: process.env.NODE_ENV === 'production' ? process.env.DB_PASS as string : process.env.DEV_DB_PASS as string,
+  host: process.env.NODE_ENV === 'production' ? process.env.DB_HOST as string : process.env.DEV_DB_HOST as string,
+  port: parseInt(process.env.NODE_ENV === 'production' ? process.env.DB_PORT as string : process.env.DEV_DB_PORT as string),
+  dialect: 'mysql',
+});
 
 (async () => {
   try {

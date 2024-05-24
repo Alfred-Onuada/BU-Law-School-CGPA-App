@@ -335,8 +335,6 @@ export async function getStudents(req: Request, res: Response) {
         cumulativeTotalPossibleGradePoints += allCoursesWithinLevel.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
       }
 
-      console.log(cumulativeTotalGradePointsGained, cumulativeTotalPossibleGradePoints);
-
       const CGPA = cumulativeTotalPossibleGradePoints > 0
         ? (cumulativeTotalGradePointsGained / cumulativeTotalPossibleGradePoints) * 5
         : 0;
