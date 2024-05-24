@@ -8,7 +8,7 @@
     </div>
   </div>
 
-  <div *ngIf="!(semesterLoading || sessionLoading || studentLoading) && session && semester">
+  <div *ngIf="!(semesterLoading || sessionLoading || studentLoading) && session && semester && students">
     <div class="flex justify-between items-center mb-5">
       <h2 class="text-xl font-semibold flex">
         <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"

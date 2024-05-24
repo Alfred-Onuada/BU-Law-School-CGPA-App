@@ -40,7 +40,11 @@ export class CoursesComponent {
 
   showError = false;
   errorMessage = '';
-  loading = true;
+
+  sessionLoading = true;
+  semesterLoading = true;
+  studentLoading = true;
+  coursesAndGradeLoading = true;
 
   constructor(
     private router: Router,
@@ -62,6 +66,8 @@ export class CoursesComponent {
     this.sessionSub$ = this.sessionService.getSession(this.sessionId).subscribe({
       next: (session) => {
         this.session = session;
+
+        this.sessionLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -72,7 +78,7 @@ export class CoursesComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.sessionLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -83,6 +89,8 @@ export class CoursesComponent {
     this.semesterSub$ = this.semesterService.getSemester(this.semesterId).subscribe({
       next: (semester) => {
         this.semester = semester;
+
+        this.semesterLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -93,7 +101,7 @@ export class CoursesComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.semesterLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -104,6 +112,8 @@ export class CoursesComponent {
     this.studentSub$ = this.studentService.getStudent(this.studentId).subscribe({
       next: (student) => {
         this.student = student;
+
+        this.studentLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -114,7 +124,7 @@ export class CoursesComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.studentLoading = false;
         }, 3000);
       },
       complete: () => {
@@ -125,6 +135,8 @@ export class CoursesComponent {
     this.coursesAndGradeSub$ = this.gradeService.getCoursesAndGrade(this.sessionId, this.semesterId, this.level, this.studentId).subscribe({
       next: (result) => {
         this.coursesAndGrade = result;
+
+        this.coursesAndGradeLoading = false;
       },
       error: (error) => {
         console.error(error);
@@ -135,7 +147,7 @@ export class CoursesComponent {
         setTimeout(() => {
           this.showError = false;
           this.errorMessage = '';
-          this.loading = false;
+          this.coursesAndGradeLoading = false;
         }, 3000);
       },
       complete: () => {

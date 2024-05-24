@@ -1,76 +1,85 @@
 <app-header></app-header>
 
 <div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
-  <div class="flex justify-between items-center mb-5">
-    <h2 class="text-xl font-semibold flex">
-      <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
-        >Sessions</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span
-        class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/semesters']"
-        [queryParams]="{ sessionId }"
-        >{{ session.name }}</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span
-        class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/level']"
-        [queryParams]="{ semesterId }"
-        >{{ semester.name }}</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span
-        class="mx-3 text-[#26A59A] cursor-pointer"
-        [routerLink]="['/students']"
-        [queryParams]="{
-          level,
-          semesterId,
-          sessionId,
-        }"
-        >{{ level }}</span
-      >
-      <img src="assets/right-caret.svg" alt="Right Caret" />
-      <span class="mx-3">{{ student.lastName + ' ' + student.firstName }}</span>
-    </h2>
+  <div *ngIf="studentLoading || sessionLoading || semesterLoading || coursesAndGradeLoading" class="flex justify-center items-center h-[70vh]">
+    <div class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32" *ngIf="!showError"></div>
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
+    </div>
   </div>
 
-  <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500">
-      <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-        <tr>
-          <th scope="col" class="px-6 py-3">Course</th>
-          <th scope="col" class="px-6 py-3">No. of Units</th>
-          <th scope="col" class="px-6 py-3">Score</th>
-          <th scope="col" class="px-6 py-3">Grade</th>
-          <th scope="col" class="px-6 py-3"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          class="odd:bg-white even:bg-gray-50 border-b"
-          *ngFor="let course of coursesAndGrade"
+  <div *ngIf="!(studentLoading || sessionLoading || semesterLoading || coursesAndGradeLoading) && student && session && semester && coursesAndGrade">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-xl font-semibold flex">
+        <span class="mx-3 text-[#26A59A] cursor-pointer" routerLink="/"
+          >Sessions</span
         >
-          <th
-            scope="row"
-            class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span
+          class="mx-3 text-[#26A59A] cursor-pointer"
+          [routerLink]="['/semesters']"
+          [queryParams]="{ sessionId }"
+          >{{ session.name }}</span
+        >
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span
+          class="mx-3 text-[#26A59A] cursor-pointer"
+          [routerLink]="['/level']"
+          [queryParams]="{ semesterId }"
+          >{{ semester.name }}</span
+        >
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span
+          class="mx-3 text-[#26A59A] cursor-pointer"
+          [routerLink]="['/students']"
+          [queryParams]="{
+            level,
+            semesterId,
+            sessionId,
+          }"
+          >{{ level }}</span
+        >
+        <img src="assets/right-caret.svg" alt="Right Caret" />
+        <span class="mx-3">{{ student.lastName + ' ' + student.firstName }}</span>
+      </h2>
+    </div>
+  
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3">Course</th>
+            <th scope="col" class="px-6 py-3">No. of Units</th>
+            <th scope="col" class="px-6 py-3">Score</th>
+            <th scope="col" class="px-6 py-3">Grade</th>
+            <th scope="col" class="px-6 py-3"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            class="odd:bg-white even:bg-gray-50 border-b"
+            *ngFor="let course of coursesAndGrade"
           >
-            {{ course.name }}
-          </th>
-          <td class="px-6 py-4">{{ course.units }}</td>
-          <td class="px-6 py-4">{{ course.score }}</td>
-          <td class="px-6 py-4">{{ course.grade }}</td>
-          <td class="px-6 py-4">
-            <a
-              data-modal-target="edit-grade-modal" data-modal-toggle="edit-grade-modal" type="button"
-              class="font-medium text-[#014282] hover:underline"
-              (click)="openEditModal(course.courseId, course.score, course.name)"
-              >Edit Grade</a
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
             >
-          </td>
-        </tr>
-      </tbody>
-    </table>
+              {{ course.name }}
+            </th>
+            <td class="px-6 py-4">{{ course.units }}</td>
+            <td class="px-6 py-4">{{ course.score }}</td>
+            <td class="px-6 py-4">{{ course.grade }}</td>
+            <td class="px-6 py-4">
+              <a
+                data-modal-target="edit-grade-modal" data-modal-toggle="edit-grade-modal" type="button"
+                class="font-medium text-[#014282] hover:underline"
+                (click)="openEditModal(course.courseId, course.score, course.name)"
+                >Edit Grade</a
+              >
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
