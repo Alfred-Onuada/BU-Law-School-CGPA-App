@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 import { HeaderComponent } from "../header/header.component";
@@ -17,7 +17,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     styleUrls: ['./semesters.component.css'],
     imports: [CommonModule, HeaderComponent, RouterLink, MatDialogModule]
 })
-export class SemestersComponent implements OnInit {
+export class SemestersComponent {
   constructor(
     private titleService: Title,
     private router: Router,
@@ -25,25 +25,7 @@ export class SemestersComponent implements OnInit {
     public dialog: MatDialog
   ) {
     this.titleService.setTitle("Semesters - Babcock University School of Law and Security Studies");
-  }
 
-  session!: ISession;
-  semesters: ISemester[] = []
-  semestersSub$!: Subscription;
-  loading = true;
-  showError = false;
-  errorMessage = '';
-  sessionId = '';
-
-  openSemesterModal() {
-    this.dialog.open(AddSemesterModalComponent, {
-      data: {
-        sessionId: this.sessionId
-      }
-    });
-  }
-
-  ngOnInit() {
     this.sessionId = this.router.parseUrl(this.router.url).queryParams['sessionId'];
 
     this.semestersSub$ = this.semesterService.getSemesters(this.sessionId).subscribe({
@@ -66,6 +48,22 @@ export class SemestersComponent implements OnInit {
       },
       complete: () => {
         this.semestersSub$.unsubscribe();
+      }
+    });
+  }
+
+  session!: ISession;
+  semesters: ISemester[] = []
+  semestersSub$!: Subscription;
+  loading = true;
+  showError = false;
+  errorMessage = '';
+  sessionId = '';
+
+  openSemesterModal() {
+    this.dialog.open(AddSemesterModalComponent, {
+      data: {
+        sessionId: this.sessionId
       }
     });
   }
