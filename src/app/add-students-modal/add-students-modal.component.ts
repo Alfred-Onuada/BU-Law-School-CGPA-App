@@ -24,6 +24,9 @@ export class AddStudentsModalComponent {
   noOfRowsMessage = '';
   students: any[] = [];
 
+  csvUploadLoading = false;
+  regularLoading = false;
+
   constructor(
     public dialogRef: MatDialogRef<AddStudentsModalComponent>,
     private studentService: StudentService
@@ -41,9 +44,13 @@ export class AddStudentsModalComponent {
   }
 
   addBulkStudents() {
+    this.csvUploadLoading = true;
+
     this.studentService.addBulkStudents(this.students)
       .subscribe({
         next: () => {
+          this.csvUploadLoading = false;
+
           this.showSuccess = true;
           this.successMessage = 'Students created successfully';
 
@@ -54,6 +61,8 @@ export class AddStudentsModalComponent {
         },
         error: (error) => {
           console.error(error);
+          this.csvUploadLoading = false;
+
           this.showError = true;
           this.errorMessage = error.message;
 
@@ -100,7 +109,11 @@ export class AddStudentsModalComponent {
   }
 
   handleSubmit() {
+    this.regularLoading = true;
+
     if (!this.form.valid) {
+      this.regularLoading = false;
+
       this.showError = true;
       this.errorMessage = 'Please fill in all fields correctly';
 
@@ -119,6 +132,8 @@ export class AddStudentsModalComponent {
     )
       .subscribe({
         next: () => {
+          this.regularLoading = false;
+
           this.form.reset();
           this.showSuccess = true;
           this.successMessage = 'Student created successfully';
@@ -129,6 +144,8 @@ export class AddStudentsModalComponent {
           }, 3000);
         },
         error: (error) => {
+          this.regularLoading = false;
+
           console.error(error);
           this.showError = true;
           this.errorMessage = error.message;

@@ -53,9 +53,10 @@
             Upload CSV
           </label>
           <span class="font-medium">{{csvName}} {{noOfRowsMessage}}</span>
-          <button *ngIf="noOfRows > 0" class="bg-[#014282] py-2 px-3 text-white rounded-md ml-5"
+          <button *ngIf="noOfRows > 0" class="bg-[#014282] py-2 px-3 text-white rounded-md ml-5 flex items-center"
             (click)="addBulkStudents()">
             Add Students
+            <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="csvUploadLoading"></div>
           </button>
           <input type="file" accept="text/csv" id="studentsCSV" class="hidden" (change)="parseCSVData($event)">
         </div>
@@ -92,8 +93,9 @@
             <option *ngFor="let i of [100,200,300,400,500,600]" [value]="i">{{i}} Level</option>
           </select>
   
-          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5">
+          <button class="bg-[#014282] py-2 px-3 text-white rounded-md mt-5 flex items-center">
             Add Student
+            <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="regularLoading"></div>
           </button>
         </form>
       </div>
