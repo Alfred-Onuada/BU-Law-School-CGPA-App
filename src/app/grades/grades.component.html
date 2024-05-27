@@ -81,5 +81,11 @@
         </tbody>
       </table>
     </div>
+
+    <button class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center mt-3"
+      (click)="exportResult()">
+      Export Result
+      <div class="loader ease-linear rounded-full border-2 border-t-2 h-7 w-7 ml-4" *ngIf="exportResultLoading"></div>
+    </button>
   </div>
 </div>

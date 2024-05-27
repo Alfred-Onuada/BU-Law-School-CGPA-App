@@ -45,6 +45,7 @@ export class CoursesComponent {
   semesterLoading = true;
   studentLoading = true;
   coursesAndGradeLoading = true;
+  exportResultLoading = false;
 
   constructor(
     private router: Router,
@@ -162,5 +163,42 @@ export class CoursesComponent {
 
   openEditModal(courseId: string, score: string, courseName: string) {
     this.dialog.open(EditGradesModalComponent, { data: { courseId, score, courseName } });
+  }
+
+  exportResult() {
+    this.exportResultLoading = true;
+
+    const csv = this.convertToCSV(this.coursesAndGrade);
+    const blob = this.createBlob(csv);
+    this.downloadCSV(blob, `${this.student.lastName} ${this.student.firstName} - ${this.semester.name} - ${this.level} level.csv`);
+
+    this.exportResultLoading = false;
+  }
+
+  convertToCSV(array: any[]): string {
+    const header = Object.keys(array[0]).join(',');
+    const rows = array.map(obj => 
+      Object.values(obj).map(value => 
+        typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value
+      ).join(',')
+    );
+    return [header, ...rows].join('\r\n');
+  }
+
+  createBlob(csv: string): Blob {
+    return new Blob([csv], { type: 'text/csv' });
+  }
+
+  downloadCSV(blob: Blob, filename: string) {
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    
+    link.setAttribute('href', url);
+    link.setAttribute('download', filename);
+    document.body.appendChild(link);
+    link.click();
+    
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   }
 }
