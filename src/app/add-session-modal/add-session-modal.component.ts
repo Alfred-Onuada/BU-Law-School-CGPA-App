@@ -17,14 +17,17 @@ export class AddSessionModalComponent {
   errorMessage = '';
   showSuccess = false;
   successMessage = '';
+
+  // loop through from current year to current year - 30
+  years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
   
   constructor(
     public dialogRef: MatDialogRef<AddSessionModalComponent>,
     private sessionService: SessionService
   ) {
     this.form = new FormGroup({
-      name: new FormControl('', Validators.required),
-      startYear: new FormControl(0, Validators.required),
+      startYear: new FormControl(this.years[1], Validators.required),
+      endYear: new FormControl(this.years[0], Validators.required),
     });
   }
 
@@ -44,7 +47,19 @@ export class AddSessionModalComponent {
       return;
     }
 
-    this.sessionService.createSession(this.form.value.name, this.form.value.startYear)
+    if (this.form.value.startYear >= this.form.value.endYear) {
+      this.showError = true;
+      this.errorMessage = 'End year must be greater than start year';
+
+      setTimeout(() => {
+        this.showError = false;
+        this.errorMessage = '';
+      }, 3000);
+      return;
+    }
+
+    const sessionName = `${this.form.value.startYear}/${this.form.value.endYear}`;
+    this.sessionService.createSession(sessionName, this.form.value.startYear)
       .subscribe({
         next: () => {
           this.form.reset();

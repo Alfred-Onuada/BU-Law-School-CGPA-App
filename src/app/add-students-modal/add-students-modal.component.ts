@@ -15,6 +15,8 @@ import * as Papa from 'papaparse';
 export class AddStudentsModalComponent {
   form: FormGroup;
 
+  years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
+
   showError = false;
   errorMessage = '';
   showSuccess = false;

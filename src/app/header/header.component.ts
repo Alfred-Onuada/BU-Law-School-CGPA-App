@@ -10,7 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     standalone: true,
     templateUrl: './header.component.html',
     styleUrls: ['./header.component.css'],
-    imports: [CommonModule, RouterLink, MatDialogModule]
+    imports: [CommonModule, RouterLink, MatDialogModule, RouterLink]
 })
 export class HeaderComponent {
     constructor(

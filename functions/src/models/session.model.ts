@@ -14,6 +14,7 @@ const SESSION = sequelize.define("Session", {
   startYear: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    unique: true,
   }
 }, {timestamps: true});
 

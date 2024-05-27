@@ -47,21 +47,15 @@
         </div>
 
         <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-          <h4 class="mb-2 font-normal text-sm">Session title</h4>
-          <input
-            type="text"
-            formControlName="name"
-            placeholder="2021/2022"
-            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
-          />
-
           <h4 class="mb-2 font-normal text-sm">What year will this session start?</h4>
-          <input
-            type="number"
-            formControlName="startYear"
-            placeholder="2021"
-            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
-          />
+          <select formControlName="startYear" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3">
+            <option *ngFor="let year of years" [value]="year">{{year}}</option>
+          </select>
+
+          <h4 class="mb-2 font-normal text-sm">What year will this session end?</h4>
+          <select formControlName="endYear" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3">
+            <option *ngFor="let year of years" [value]="year">{{year}}</option>
+          </select>
           <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3" type="submit">
             Create
           </button>

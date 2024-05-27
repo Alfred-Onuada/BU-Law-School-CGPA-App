@@ -25,6 +25,11 @@ export async function createSession(req: Request, res: Response) {
 
     res.status(201).json({ message: 'Success', data: session });
   } catch (error: any) {
+    if (error.name === 'SequelizeUniqueConstraintError') {
+      res.status(400).json({ message: error.errors[0].message });
+      return;
+    }
+    
     res.status(500).json({ message: error.message });
   }
 }

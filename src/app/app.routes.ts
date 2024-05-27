@@ -4,6 +4,7 @@ import { SemestersComponent } from './semesters/semesters.component';
 import { LevelsComponent } from './levels/levels.component';
 import { StudentsComponent } from './students/students.component';
 import { CoursesComponent } from './grades/grades.component';
+import { AllStudentsListComponent } from './all-students-list/all-students-list.component';
 
 export const routes: Routes = [
   { path: '', component: SessionsComponent },
@@ -11,4 +12,5 @@ export const routes: Routes = [
   { path: 'levels', component: LevelsComponent },
   { path: 'students', component: StudentsComponent },
   { path: 'grades', component: CoursesComponent },
+  { path: 'all-students', component: AllStudentsListComponent }
 ];

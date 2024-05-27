@@ -87,12 +87,9 @@
           />
   
           <h4 class="mb-2 font-normal text-sm">Year of Enrollment</h4>
-          <input
-            type="text"
-            placeholder="2021"
-            formControlName="yearEnrolled"
-            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
-          />
+          <select formControlName="yearEnrolled" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3">
+            <option *ngFor="let year of years" [value]="year">{{year}}</option>
+          </select>
   
           <h4 class="mb-2 font-normal text-sm">Level at Enrollment</h4>
           <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
