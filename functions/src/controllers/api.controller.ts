@@ -49,7 +49,7 @@ export async function getSemesters(req: Request, res: Response) {
 
 export async function createSemester(req: Request, res: Response) {
   try {
-    const { name } = req.body;
+    const { name, optional } = req.body;
     const { sessionId } = req.params;
     const session = await SESSION.findByPk(sessionId);
 
@@ -58,7 +58,7 @@ export async function createSemester(req: Request, res: Response) {
       return;
     }
 
-    const semester = await SEMESTER.create({ name, sessionId });
+    const semester = await SEMESTER.create({ name, sessionId, optional });
 
     res.status(201).json({ message: 'Success', data: semester });
   } catch (error: any) {

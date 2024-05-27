@@ -54,6 +54,15 @@
             placeholder="Summer Semester"
             class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
           />
+
+          <h4 class="mb-2 font-normal text-sm">Is this an optional semester? (e.g summer)</h4>
+          <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3"
+            formControlName="optional"
+            >
+            <option [value]=false>No, this semester is compulsory</option>
+            <option [value]=true>Yes, this semester is optional</option>
+          </select>
+
           <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3 flex items-center" type="submit">
             Create
             <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="loading"></div>

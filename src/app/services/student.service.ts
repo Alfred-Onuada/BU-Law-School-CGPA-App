@@ -14,12 +14,14 @@ export class StudentService {
   addStudent(
     firstName: string,
     lastName: string,
+    matricNo: string,
     yearEnrolled: number,
     levelAtEnrollment: number
   ): Observable<IApiResponse> {
     return this.http.post<IApiResponse>(`${environment.apiUrl}/student`, {
       firstName,
       lastName,
+      matricNo,
       yearEnrolled,
       levelAtEnrollment,
     });

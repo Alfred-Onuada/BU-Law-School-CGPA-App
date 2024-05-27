@@ -46,7 +46,7 @@
           <span class="block sm:inline">{{successMessage}}</span>       
         </div>
 
-        <h5>For your convenience, you can upload a csv containing a list of students with the following columns (firstName, lastName, yearEnrolled, levelAtEnrollment)</h5>
+        <h5>For your convenience, you can upload a csv containing a list of students with the following columns (firstName, lastName, matricNo, yearEnrolled, levelAtEnrollment)</h5>
         <div class="flex items-center">
           <label for="studentsCSV" class="w-fit border-[#014282] border-2 py-2 px-3 text-[#014282] rounded-md mt-5 flex items-center mr-5 font-semibold mb-5">
             <img src="assets/file-upload.svg" alt="Icon" class="mr-2 w-[20px] h-[20px]">
@@ -75,6 +75,14 @@
             type="text"
             placeholder="Chukwuma"
             formControlName="lastName"
+            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
+          />
+
+          <h4 class="mb-2 font-normal text-sm">Matric No</h4>
+          <input
+            type="text"
+            placeholder="19/9901"
+            formControlName="matricNo"
             class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
           />
   

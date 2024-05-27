@@ -15,6 +15,10 @@ const STUDENT = sequelize.define("Student", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  matricNo: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
   yearEnrolled: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -24,8 +28,6 @@ const STUDENT = sequelize.define("Student", {
     allowNull: false,
   },
 }, {timestamps: true});
-
-// create the derived field GPA and CGPA from grades
 
 (async () => {
   await sequelize.sync();

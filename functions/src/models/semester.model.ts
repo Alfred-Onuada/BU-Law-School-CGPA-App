@@ -11,6 +11,10 @@ const SEMESTER = sequelize.define("Semester", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  optional: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false,
+  },
   sessionId: {
     type: DataTypes.STRING,
     defaultValue: DataTypes.UUIDV4,

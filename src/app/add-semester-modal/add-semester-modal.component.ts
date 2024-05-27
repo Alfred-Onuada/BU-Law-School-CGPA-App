@@ -26,6 +26,7 @@ export class AddSemesterModalComponent {
   ) {
     this.form = new FormGroup({
       name: new FormControl('', Validators.required),
+      optional: new FormControl(false)
     });
   }
 
@@ -49,7 +50,7 @@ export class AddSemesterModalComponent {
       return;
     }
 
-    this.semestersService.createSemester(this.form.value.name, this.data.sessionId)
+    this.semestersService.createSemester(this.form.value.name, this.form.value.optional, this.data.sessionId)
       .subscribe({
         next: () => {
           this.form.reset();

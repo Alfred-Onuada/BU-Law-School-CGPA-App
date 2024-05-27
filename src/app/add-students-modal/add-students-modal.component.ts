@@ -34,6 +34,7 @@ export class AddStudentsModalComponent {
     this.form = new FormGroup({
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
+      matricNo: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]{2}\/[0-9]{4}$/)]),
       yearEnrolled: new FormControl(null, Validators.required),
       levelAtEnrollment: new FormControl(null, Validators.required),
     });
@@ -87,6 +88,7 @@ export class AddStudentsModalComponent {
             return {
               firstName: student['firstName'],
               lastName: student['lastName'],
+              matricNo: student['matricNo'],
               yearEnrolled: student['yearEnrolled'],
               levelAtEnrollment: student['levelAtEnrollment']
             };
@@ -127,6 +129,7 @@ export class AddStudentsModalComponent {
     this.studentService.addStudent(
       this.form.value.firstName,
       this.form.value.lastName,
+      this.form.value.matricNo,
       this.form.value.yearEnrolled,
       this.form.value.levelAtEnrollment
     )
