@@ -107,7 +107,7 @@ export class EditGradesModalComponent {
       error: (error) => {
         this.loading = false;
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;

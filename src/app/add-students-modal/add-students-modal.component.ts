@@ -65,7 +65,7 @@ export class AddStudentsModalComponent {
           this.csvUploadLoading = false;
 
           this.showError = true;
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
 
           setTimeout(() => {
             this.showError = false;
@@ -151,7 +151,7 @@ export class AddStudentsModalComponent {
 
           console.error(error);
           this.showError = true;
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
 
           setTimeout(() => {
             this.showError = false;

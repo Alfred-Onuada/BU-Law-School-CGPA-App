@@ -94,7 +94,7 @@ export class EditCoursesModalComponent {
         this.sessionLoading = false;
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -118,7 +118,7 @@ export class EditCoursesModalComponent {
         this.levelLoading = false;
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -148,7 +148,7 @@ export class EditCoursesModalComponent {
           this.semesterLoading = false;
 
           this.showError = true;
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
 
           setTimeout(() => {
             this.showError = false;
@@ -225,7 +225,7 @@ export class EditCoursesModalComponent {
           this.fetchingCourses = false;
 
           this.showError = true;
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
 
           setTimeout(() => {
             this.showError = false;
@@ -271,7 +271,7 @@ export class EditCoursesModalComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         this.saveCoursesLoading = false;
 
@@ -333,7 +333,7 @@ export class EditCoursesModalComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         this.removeCoursesLoading = false;
 

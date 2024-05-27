@@ -87,7 +87,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -110,7 +110,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -134,7 +134,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -167,7 +167,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
         
         this.paginationLoading = false;
 
@@ -201,7 +201,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
         
         this.paginationLoading = false;
 
@@ -231,7 +231,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
         
         this.searchLoading = false;
 
@@ -262,7 +262,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
         
         this.searchLoading = false;
 
@@ -284,7 +284,7 @@ export class StudentsComponent implements OnInit {
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);
-        this.downloadCSV(blob, 'students-full.csv');
+        this.downloadCSV(blob, `${this.session.name.replace('/', '_')} - ${this.semester.name} - ${this.level}.csv`);
 
         this.exportAllStudentsLoading = false;
       },
@@ -292,7 +292,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         this.exportAllStudentsLoading = false;
 
@@ -314,7 +314,7 @@ export class StudentsComponent implements OnInit {
       next: (result) => {
         const csv = this.convertToCSV(result.students);
         const blob = this.createBlob(csv);
-        this.downloadCSV(blob, `students (${this.query}).csv`);
+        this.downloadCSV(blob, `(${this.query}) - ${this.session.name.replace('/', '_')} - ${this.semester.name} - ${this.level}.csv`);
 
         this.exportResultsLoading = false;
       },
@@ -322,7 +322,7 @@ export class StudentsComponent implements OnInit {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         this.exportResultsLoading = false;
 

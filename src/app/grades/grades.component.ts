@@ -73,7 +73,7 @@ export class CoursesComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -96,7 +96,7 @@ export class CoursesComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -119,7 +119,7 @@ export class CoursesComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;
@@ -142,7 +142,7 @@ export class CoursesComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;

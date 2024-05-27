@@ -67,7 +67,7 @@ export class AddSemesterModalComponent {
         error: (error) => {
           console.error(error);
           this.showError = true;
-          this.errorMessage = error.message;
+          this.errorMessage = error.error.message;
 
           this.loading = false;
 
