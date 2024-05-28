@@ -21,8 +21,11 @@ export class SemestersService {
       );
   }
 
-  createSemester(name: string, optional: boolean, sessionId: string): Observable<IApiResponse> {
-    return this.http.post<IApiResponse>(`${environment.apiUrl}/sessions/${sessionId}/semesters`, { name, optional });
+  createSemester(name: string, optional: boolean, sessionId: string): Observable<ISemester> {
+    return this.http.post<IApiResponse>(`${environment.apiUrl}/sessions/${sessionId}/semesters`, { name, optional })
+      .pipe(
+        map((response) => response.data as ISemester)
+      )
   }
 
   getSemester(semesterId: string): Observable<ISemester> {

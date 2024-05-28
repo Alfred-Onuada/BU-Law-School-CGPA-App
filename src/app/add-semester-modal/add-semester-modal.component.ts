@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { SemestersService } from '../services/semesters.service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ISemester } from '../interfaces/semester';
 
 @Component({
   selector: 'app-add-semester-modal',
@@ -18,6 +19,8 @@ export class AddSemesterModalComponent {
   showSuccess = false;
   successMessage = '';
   loading = false;
+
+  createdSemesters: ISemester[] = [];
   
   constructor(
     private semestersService: SemestersService,
@@ -31,7 +34,7 @@ export class AddSemesterModalComponent {
   }
 
   closeModal() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.createdSemesters);
   }
 
   handleSubmit() {
@@ -52,7 +55,9 @@ export class AddSemesterModalComponent {
 
     this.semestersService.createSemester(this.form.value.name, this.form.value.optional, this.data.sessionId)
       .subscribe({
-        next: () => {
+        next: (result) => {
+          this.createdSemesters.push(result);
+
           this.form.reset();
           this.showSuccess = true;
           this.successMessage = 'Semester created successfully';

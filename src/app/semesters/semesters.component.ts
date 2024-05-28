@@ -65,6 +65,14 @@ export class SemestersComponent {
       data: {
         sessionId: this.sessionId
       }
-    });
+    })
+      .afterClosed()
+      .subscribe({
+        next: (data: ISemester[]) => {
+          if (data) {
+            this.semesters = [...this.semesters, ...data].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+          }
+        }
+      });
   }
 }
