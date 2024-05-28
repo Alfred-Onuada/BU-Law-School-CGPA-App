@@ -93,7 +93,7 @@
               <select class="mr-5 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2"
                 (change)="updateCourse($event, idx, 'units')"
                 >
-                <option *ngFor="let i of [1,2,3,4,5,6]" [selected]="course.units === i">{{i}}</option>
+                <option *ngFor="let i of [0,1,2,3,4,5,6]" [selected]="course.units === i">{{i}}</option>
               </select>
               <a
                 class="font-medium text-sm text-[#014282] hover:underline"

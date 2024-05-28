@@ -17,7 +17,8 @@ import {
   deleteCourse,
   getStudent,
   getStudentGrades,
-  saveGrades
+  saveGrades,
+  getAllStudents
 } from '../controllers/api.controller';
 const router = Router();
 
@@ -56,5 +57,7 @@ router.delete('/course/:courseId', deleteCourse);
 router.get('/grades', getStudentGrades);
 
 router.post('/grades', saveGrades);
+
+router.get('/all-students', getAllStudents);
 
 export default router;

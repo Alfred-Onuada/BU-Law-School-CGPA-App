@@ -1,0 +1,140 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div *ngIf="studentLoading" class="flex justify-center items-center h-[70vh]">
+    <div
+      class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32"
+      *ngIf="!showError"
+    ></div>
+    <div
+      *ngIf="showError"
+      class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      role="alert"
+    >
+      <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!studentLoading">
+    <div class="flex justify-between items-center mb-5">
+      <h2 class="text-xl font-semibold flex">All Students</h2>
+    </div>
+
+    <div class="flex justify-between mb-5">
+      <div class="flex items-center relative">
+        <input
+          type="search"
+          name="search"
+          placeholder="Search something"
+          class="border-gray-200 border-[2px] px-2.5 py-2 w-[500px] mr-3 rounded-md"
+          [(ngModel)]="searchTerm"
+        />
+        <div
+          class="loader ease-linear rounded-full bg-white border-2 border-t-2 h-7 w-7 absolute top-[7px] left-[460px]"
+          *ngIf="searchLoading"
+        ></div>
+        <button
+          class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3"
+          (click)="resetSearch()"
+        >
+          Reset
+        </button>
+        <button
+          *ngIf="!searchTerm.length"
+          class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center"
+          (click)="exportAllStudents()"
+        >
+          Export all Students
+          <div
+            class="loader ease-linear rounded-full border-2 border-t-2 h-7 w-7 ml-4"
+            *ngIf="exportAllStudentsLoading"
+          ></div>
+        </button>
+        <button
+          *ngIf="searchTerm.length"
+          class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center"
+          (click)="exportResults()"
+        >
+          Export Results
+          <div
+            class="loader ease-linear rounded-full border-2 border-t-2 h-7 w-7 ml-4"
+            *ngIf="exportResultsLoading"
+          ></div>
+        </button>
+      </div>
+      <div class="flex items-center">
+        <img
+          src="assets/right-caret.svg"
+          alt="Flip caret"
+          class="rotate-180 cursor-pointer"
+          (click)="prevPage()"
+        />
+        <span class="mx-3 text-sm"
+          >Page {{ currentPage }} of {{ totalPages }}</span
+        >
+        <img
+          src="assets/right-caret.svg"
+          alt="Flip caret"
+          class="cursor-pointer"
+          (click)="nextPage()"
+        />
+      </div>
+    </div>
+
+    <div class="w-full flex justify-center mb-5">
+      <div
+        class="loader ease-linear rounded-full border-4 border-t-4 h-16 w-16"
+        *ngIf="paginationLoading"
+      ></div>
+    </div>
+
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3">Student name</th>
+            <th scope="col" class="px-6 py-3">Matric Number</th>
+            <th scope="col" class="px-6 py-3">Current CGPA</th>
+            <th scope="col" class="px-6 py-3">GPA 100 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 100 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 200 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 200 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 300 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 300 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 400 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 400 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 500 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 500 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 600 level 1st Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 600 level 2nd Semester</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="odd:bg-white even:bg-gray-50 border-b"
+            *ngFor="let student of students">
+            <th
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
+              scope="row"
+            >
+              {{student.lastName + ' ' + student.firstName}}
+            </th>
+            <td class="px-6 py-4">{{student.matricNo}}</td>
+            <td class="px-6 py-4">{{student.currentCGPA}}</td>
+            <td class="px-6 py-4">{{student.level1semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level1semester2GPA}}</td>
+            <td class="px-6 py-4">{{student.level2semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level2semester2GPA}}</td>
+            <td class="px-6 py-4">{{student.level3semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level3semester2GPA}}</td>
+            <td class="px-6 py-4">{{student.level4semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level4semester2GPA}}</td>
+            <td class="px-6 py-4">{{student.level5semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level5semester2GPA}}</td>
+            <td class="px-6 py-4">{{student.level6semester1GPA}}</td>
+            <td class="px-6 py-4">{{student.level6semester2GPA}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

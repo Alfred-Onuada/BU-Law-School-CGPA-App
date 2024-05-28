@@ -1,7 +1,12 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from '@angular/forms';
 import { StudentService } from '../services/student.service';
 import * as Papa from 'papaparse';
 
@@ -10,7 +15,7 @@ import * as Papa from 'papaparse';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './add-students-modal.component.html',
-  styleUrls: ['./add-students-modal.component.css']
+  styleUrls: ['./add-students-modal.component.css'],
 })
 export class AddStudentsModalComponent {
   form: FormGroup;
@@ -36,7 +41,10 @@ export class AddStudentsModalComponent {
     this.form = new FormGroup({
       firstName: new FormControl(null, Validators.required),
       lastName: new FormControl(null, Validators.required),
-      matricNo: new FormControl(null, [Validators.required, Validators.pattern(/^[0-9]{2}\/[0-9]{4}$/)]),
+      matricNo: new FormControl(null, [
+        Validators.required,
+        Validators.pattern(/^[0-9]{2}\/[0-9]{4}$/),
+      ]),
       yearEnrolled: new FormControl(null, Validators.required),
       levelAtEnrollment: new FormControl(null, Validators.required),
     });
@@ -49,32 +57,31 @@ export class AddStudentsModalComponent {
   addBulkStudents() {
     this.csvUploadLoading = true;
 
-    this.studentService.addBulkStudents(this.students)
-      .subscribe({
-        next: () => {
-          this.csvUploadLoading = false;
+    this.studentService.addBulkStudents(this.students).subscribe({
+      next: () => {
+        this.csvUploadLoading = false;
 
-          this.showSuccess = true;
-          this.successMessage = 'Students created successfully';
+        this.showSuccess = true;
+        this.successMessage = 'Students created successfully';
 
-          setTimeout(() => {
-            this.showSuccess = false;
-            this.successMessage = '';
-          }, 3000);
-        },
-        error: (error) => {
-          console.error(error);
-          this.csvUploadLoading = false;
+        setTimeout(() => {
+          this.showSuccess = false;
+          this.successMessage = '';
+        }, 3000);
+      },
+      error: (error) => {
+        console.error(error);
+        this.csvUploadLoading = false;
 
-          this.showError = true;
-          this.errorMessage = error.error.message;
+        this.showError = true;
+        this.errorMessage = error.error.message;
 
-          setTimeout(() => {
-            this.showError = false;
-            this.errorMessage = '';
-          }, 3000);
-        }
-      });
+        setTimeout(() => {
+          this.showError = false;
+          this.errorMessage = '';
+        }, 3000);
+      },
+    });
   }
 
   parseCSVData(event: any): void {
@@ -86,28 +93,38 @@ export class AddStudentsModalComponent {
         header: true,
         complete: (result) => {
           // reformat to get only the fields I need (firstName, lastName, yearEnrolled, levelAtEnrollment)
-          this.students = result.data.map((student: any) => {
-            return {
-              firstName: student['firstName'],
-              lastName: student['lastName'],
-              matricNo: student['matricNo'],
-              yearEnrolled: student['yearEnrolled'],
-              levelAtEnrollment: student['levelAtEnrollment']
-            };
-          });
+          this.students = result.data
+            .map((student: any) => {
+              return {
+                firstName: student['firstName'],
+                lastName: student['lastName'],
+                matricNo: student['matricNo'],
+                yearEnrolled: student['yearEnrolled'],
+                levelAtEnrollment: student['levelAtEnrollment'],
+              };
+            })
+            .filter((student: any) => {
+              return (
+                student.firstName &&
+                student.lastName &&
+                student.matricNo &&
+                student.yearEnrolled &&
+                student.levelAtEnrollment
+              );
+            });
 
           this.noOfRows = this.students.length;
           this.noOfRowsMessage = ` - ${this.students.length} rows dectected`;
         },
         error: () => {
           this.showError = true;
-          this.errorMessage = "Error parsing CSV file";
+          this.errorMessage = 'Error parsing CSV file';
 
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
           }, 3000);
-        }
+        },
       });
     }
   }
@@ -128,13 +145,14 @@ export class AddStudentsModalComponent {
       return;
     }
 
-    this.studentService.addStudent(
-      this.form.value.firstName,
-      this.form.value.lastName,
-      this.form.value.matricNo,
-      this.form.value.yearEnrolled,
-      this.form.value.levelAtEnrollment
-    )
+    this.studentService
+      .addStudent(
+        this.form.value.firstName,
+        this.form.value.lastName,
+        this.form.value.matricNo,
+        this.form.value.yearEnrolled,
+        this.form.value.levelAtEnrollment
+      )
       .subscribe({
         next: () => {
           this.regularLoading = false;
@@ -153,13 +171,13 @@ export class AddStudentsModalComponent {
 
           console.error(error);
           this.showError = true;
-          this.errorMessage = error.error.message;
+          this.errorMessage = error.error.message;
 
           setTimeout(() => {
             this.showError = false;
             this.errorMessage = '';
           }, 3000);
-        }
+        },
       });
   }
 }

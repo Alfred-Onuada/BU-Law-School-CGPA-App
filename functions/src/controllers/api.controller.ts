@@ -161,7 +161,6 @@ export async function createStudent(req: Request, res: Response) {
 
     res.status(201).json({ message: 'Success' });
   } catch (error: any) {
-    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }
@@ -179,11 +178,11 @@ export async function createStudentsBulk(req: Request, res: Response) {
 
     res.status(201).json({ message: 'Success' });
   } catch (error: any) {
-    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }
 
+// this serves as search for the level by level students list
 export async function getStudents(req: Request, res: Response) {
   try {
     const { sessionId, level, semesterId } = req.query;
@@ -242,6 +241,7 @@ export async function getStudents(req: Request, res: Response) {
         [Op.or]: [
           { firstName: { [Op.like]: `%${query}%` } },
           { lastName: { [Op.like]: `%${query}%` } },
+          { matricNo: { [Op.like]: `%${query}%` } },
         ],
       };
     }
@@ -354,7 +354,6 @@ export async function getStudents(req: Request, res: Response) {
         data: { students: studentsWithGPA, total: result.count },
       });
   } catch (error: any) {
-    console.log(error);
     res.status(500).json({ message: error.message });
   }
 }
@@ -573,6 +572,104 @@ export async function saveGrades(req: Request, res: Response) {
     }
 
     res.status(201).json({ message: 'Success' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function getAllStudents(req: Request, res: Response) {
+  try {
+    let limit = 10;
+    if (typeof req.query.limit === 'string') {
+      if (parseInt(req.query.limit) > 0) {
+        limit = parseInt(req.query.limit);
+      } else if (parseInt(req.query.limit) === -1) {
+        limit = 100_000_000; // there will never be 100 million students in a school :)
+      }
+    }
+
+    // get current page
+    let page = 1;
+    let skip = 0;
+    if (
+      typeof req.query.page === 'string' &&
+      parseInt(req.query.page as string) >= 1
+    ) {
+      page = parseInt(req.query.page as string);
+      skip = (page - 1) * limit;
+    }
+
+    // check for search query
+    let query = '';
+    let queryClause = {};
+    if (
+      typeof req.query.query === 'string' &&
+      req.query.query.trim().length >= 2
+    ) {
+      query = req.query.query;
+      queryClause = {
+        [Op.or]: [
+          { firstName: { [Op.like]: `%${query}%` } },
+          { lastName: { [Op.like]: `%${query}%` } },
+          { matricNo: { [Op.like]: `%${query}%` } },
+        ],
+      };
+    }    
+
+    const result = await STUDENT.findAndCountAll({
+      where: queryClause,
+      order: [['lastName', 'ASC']],
+      limit,
+      offset: skip,
+      attributes: ['id', 'firstName', 'lastName', 'matricNo', 'levelAtEnrollment', 'yearEnrolled']
+    });
+
+    // calculate CGPA based on standard 6 years with 2 semesters (first and second) which will be marked as optional: false
+    const studentsWithCGPA = await Promise.all(result.rows.map(async (student) => {
+      const studentData = student.toJSON();
+
+      const levels = [100, 200, 300, 400, 500, 600]
+        .filter(lvl => lvl >= (student.get('levelAtEnrollment') as number))
+
+      let cumulativeTotalGradePointsGained = 0;
+      let cumulativeTotalPossibleGradePoints = 0;
+
+      for (const lvl of levels) {
+        const levelGrades = await GRADE.findAll({
+          where: {
+            studentId: studentData.id,
+            studentLevel: lvl,
+          },
+          include: [{
+            model: COURSE,
+            as: 'course',
+            required: true,
+          }]
+        });
+
+        const allCoursesWithinLevel = await COURSE.findAll({
+          where: {
+            level: lvl,
+          }
+        });
+
+        cumulativeTotalGradePointsGained += levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+        cumulativeTotalPossibleGradePoints += allCoursesWithinLevel.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+      }
+
+      const CGPA = cumulativeTotalPossibleGradePoints > 0
+        ? (cumulativeTotalGradePointsGained / cumulativeTotalPossibleGradePoints) * 5
+        : 0;
+
+      return { ...studentData, currentCGPA: parseFloat(CGPA.toFixed(2)) };
+    }));
+
+    res
+      .status(200)
+      .json({
+        message: 'Success',
+        data: { students: studentsWithCGPA, total: result.count },
+      });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }

@@ -47,13 +47,14 @@
         </div>
         
         <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-          <h4 class="mb-2 font-normal text-sm">Enter Semester Title</h4>
-          <input
-            type="text"
+          <h4 class="mb-2 font-normal text-sm">Select semester type</h4>
+          <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3"
             formControlName="name"
-            placeholder="Summer Semester"
-            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
-          />
+            >
+            <option value="First Semester">First Semester</option>
+            <option value="Second Semester">Second Semester</option>
+            <option value="Summer Semester">Summer Semester</option>
+          </select>
 
           <h4 class="mb-2 font-normal text-sm">Is this an optional semester? (e.g summer)</h4>
           <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3"

@@ -1,6 +1,7 @@
 export interface IAllStudentsList {
   id: string;
-  studentName: string;
+  firstName: string;
+  lastName: string;
   matricNo: string;
   currentCGPA: number;
   level1semester1GPA: number;

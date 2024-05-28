@@ -4,6 +4,7 @@ import { Observable, map } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { IApiResponse } from '../interfaces/api-response';
 import { IStudent } from '../interfaces/students';
+import { IAllStudentsList } from '../interfaces/all-students-list';
 
 @Injectable({
   providedIn: 'root',
@@ -64,5 +65,20 @@ export class StudentService {
     return this.http
       .get<IApiResponse>(`${environment.apiUrl}/student/${studentId}`)
       .pipe(map((response) => response.data as IStudent));
+  }
+
+  getAllStudents(pageSize: number, currentPage?: number, query?: string): Observable<{ students: IAllStudentsList[], total: number }> {
+    return this.http.get<IApiResponse>(`${environment.apiUrl}/all-students`, {
+      params: {
+        limit: pageSize.toString(),
+        page: currentPage || 1,
+        query: query || '',
+      },
+    })
+    .pipe(
+      map(
+        (response) => response.data as { students: IAllStudentsList[]; total: number }
+      )
+    );
   }
 }
