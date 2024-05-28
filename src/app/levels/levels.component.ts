@@ -89,6 +89,12 @@ export class LevelsComponent {
     }
 
     openAddLevelModal() {
-        this.dialog.open(AddLevelModalComponent);
+        this.dialog.open(AddLevelModalComponent)
+            .afterClosed()
+            .subscribe({
+                next: (data: ILevel[]) => {
+                    this.levels = [...this.levels, ...data].sort((a, b) => a.name - b.name);
+                }
+            });
     }
 }

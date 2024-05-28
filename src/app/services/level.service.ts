@@ -22,8 +22,11 @@ export class LevelService {
       );
   }
 
-  createLevel(name: number): Observable<IApiResponse> {
-    return this.http.post<IApiResponse>(`${environment.apiUrl}/levels`, { name });
+  createLevel(name: number): Observable<ILevel> {
+    return this.http.post<IApiResponse>(`${environment.apiUrl}/levels`, { name })
+      .pipe(
+        map((response) => response.data as ILevel)
+      );
   }
 
   getSemesterAndSessionDetails(semesterId: string): Observable<{semester: ISemester, session: ISession}> {

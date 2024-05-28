@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { LevelService } from '../services/level.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ILevel } from '../interfaces/level';
 
 @Component({
   selector: 'app-add-level-modal',
@@ -18,6 +19,8 @@ export class AddLevelModalComponent {
   showSuccess = false;
   successMessage = '';
   loading = false;
+
+  createdLevels: ILevel[] = [];
   
   constructor(
     private levelService: LevelService,
@@ -29,7 +32,7 @@ export class AddLevelModalComponent {
   }
 
   closeModal() {
-    this.dialog.close();
+    this.dialog.close(this.createdLevels);
   }
 
   handleSubmit() {
@@ -50,7 +53,9 @@ export class AddLevelModalComponent {
 
     this.levelService.createLevel(this.form.value.name)
       .subscribe({
-        next: () => {
+        next: (result) => {
+          this.createdLevels.push(result);
+
           this.form.reset();
           this.showSuccess = true;
           this.successMessage = 'Level created successfully';
