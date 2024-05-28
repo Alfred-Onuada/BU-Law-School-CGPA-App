@@ -28,7 +28,10 @@ export class SessionService {
       );
   }
 
-  createSession(name: string, startYear: number): Observable<IApiResponse> {
-    return this.httpService.post<IApiResponse>(`${environment.apiUrl}/sessions`, { name, startYear });
+  createSession(name: string, startYear: number): Observable<ISession> {
+    return this.httpService.post<IApiResponse>(`${environment.apiUrl}/sessions`, { name, startYear })
+      .pipe(
+        map((response: IApiResponse) => response.data as ISession)
+      );
   }
 }

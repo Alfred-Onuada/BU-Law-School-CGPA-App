@@ -57,6 +57,14 @@ export class SessionsComponent {
     }
 
     openSessionModal() {
-        this.dialog.open(AddSessionModalComponent);
+        this.dialog.open(AddSessionModalComponent)
+            .afterClosed()
+            .subscribe({
+                next: (data: ISession[]) => {
+                    if (data.length > 0) {
+                        this.sessions = [...this.sessions, ...data].sort((a, b) => b.startYear - a.startYear);
+                    }
+                }
+            });
     }
 }

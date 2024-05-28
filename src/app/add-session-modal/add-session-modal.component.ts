@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SessionService } from '../services/session.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { ISession } from '../interfaces/session';
 
 @Component({
   selector: 'app-add-session-modal',
@@ -18,6 +19,8 @@ export class AddSessionModalComponent {
   showSuccess = false;
   successMessage = '';
 
+  createdSessions: ISession[] = [];
+
   // loop through from current year to current year - 30
   years = Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i);
   
@@ -32,7 +35,7 @@ export class AddSessionModalComponent {
   }
 
   closeModal() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.createdSessions);
   }
 
   handleSubmit() {
@@ -58,10 +61,24 @@ export class AddSessionModalComponent {
       return;
     }
 
+    // must be 1 year difference
+    if (this.form.value.endYear - this.form.value.startYear !== 1) {
+      this.showError = true;
+      this.errorMessage = 'Session must be 1 year';
+
+      setTimeout(() => {
+        this.showError = false;
+        this.errorMessage = '';
+      }, 3000);
+      return;
+    }
+
     const sessionName = `${this.form.value.startYear}/${this.form.value.endYear}`;
     this.sessionService.createSession(sessionName, this.form.value.startYear)
       .subscribe({
-        next: () => {
+        next: (result) => {
+          this.createdSessions.push(result);
+
           this.form.reset();
           this.showSuccess = true;
           this.successMessage = 'Session created successfully';
