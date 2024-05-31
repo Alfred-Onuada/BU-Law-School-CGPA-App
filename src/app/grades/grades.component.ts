@@ -161,8 +161,20 @@ export class CoursesComponent {
     );
   }
 
-  openEditModal(courseId: string, score: string, courseName: string) {
-    this.dialog.open(EditGradesModalComponent, { data: { courseId, score, courseName } });
+  openEditModal(course: ICoursesAndGrade) {
+    this.dialog.open(EditGradesModalComponent, { data: course })
+      .afterClosed()
+      .subscribe((result: ICoursesAndGrade) => {
+        if (result) {
+          this.coursesAndGrade = this.coursesAndGrade.map((course) => {
+            if (course.courseId === result.courseId) {
+              course.score = result.score;
+              course.grade = result.grade;
+            }
+            return course;
+          });
+        }
+      });
   }
 
   exportResult() {

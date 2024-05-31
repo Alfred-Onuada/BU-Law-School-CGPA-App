@@ -10,7 +10,6 @@ const SEMESTER = sequelize.define("Semester", {
   name: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true,
   },
   optional: {
     type: DataTypes.BOOLEAN,

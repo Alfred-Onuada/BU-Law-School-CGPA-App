@@ -5,6 +5,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { GradesService } from '../services/grades.service';
 import { Subscription } from 'rxjs';
+import { ICoursesAndGrade } from '../interfaces/courses-and-grades';
 
 @Component({
   selector: 'app-edit-grades-modal',
@@ -22,9 +23,7 @@ export class EditGradesModalComponent {
   successMessage = '';
   errorMessage = '';
 
-  courseId!: string; // pass in from modal
-  score!: string; // pass in from modal
-  courseName!: string; // pass in from modal
+  course!: ICoursesAndGrade; // passed in from modal
 
   studentId!: string;
   sessionId!: string;
@@ -36,12 +35,10 @@ export class EditGradesModalComponent {
   constructor(
     public dialogRef: MatDialogRef<EditGradesModalComponent>,
     private router: Router,
-    @Inject(MAT_DIALOG_DATA) public data: { courseId: string, score: string, courseName: string },
+    @Inject(MAT_DIALOG_DATA) public data: ICoursesAndGrade,
     private gradeService: GradesService
   ) {
-    this.courseId = data.courseId;
-    this.score = data.score;
-    this.courseName = data.courseName;
+    this.course = data;
 
     this.form = new FormGroup({
       newScore: new FormControl(0, [Validators.required, Validators.max(100), Validators.min(0)]),
@@ -55,7 +52,7 @@ export class EditGradesModalComponent {
   }
 
   closeModal() {
-    this.dialogRef.close();
+    this.dialogRef.close(this.course);
   }
 
   handleSubmit() {
@@ -71,7 +68,7 @@ export class EditGradesModalComponent {
       return;
     }
 
-    if (!this.studentId || !this.sessionId || !this.studentLevel || !this.semesterId || !this.courseId) {
+    if (!this.studentId || !this.sessionId || !this.studentLevel || !this.semesterId || !this.course.courseId) {
       this.showError = true;
       this.errorMessage = 'An error occurred. Please try again';
 
@@ -88,7 +85,7 @@ export class EditGradesModalComponent {
     this.gradeServiceSub$ = this.gradeService.saveGrade(
       this.form.value.newScore,
       this.studentId,
-      this.courseId,
+      this.course.courseId,
       +this.studentLevel,
       this.semesterId,
       this.sessionId,
@@ -97,6 +94,10 @@ export class EditGradesModalComponent {
         this.loading = false;
         this.showSuccess = true;
         this.successMessage = 'Grade saved successfully';
+
+        // update the grade in the course
+        this.course.score = this.form.value.newScore;
+        this.course.grade = this.form.value.newScore >= 80 ? 'A' : this.form.value.newScore >= 60 ? 'B' : this.form.value.newScore >= 50 ? 'C' : this.form.value.newScore >= 45 ? 'D' : this.form.value.newScore >= 40 ? 'E' : 'F';
 
         setTimeout(() => {
           this.showSuccess = false;
@@ -107,7 +108,7 @@ export class EditGradesModalComponent {
       error: (error) => {
         this.loading = false;
         this.showError = true;
-        this.errorMessage = error.error.message;
+        this.errorMessage = error.error.message;
 
         setTimeout(() => {
           this.showError = false;

@@ -299,7 +299,6 @@ export async function getStudents(req: Request, res: Response) {
       const allCoursesWithinSemester = await COURSE.findAll({
         where: {
           semesterId,
-          sessionId,
           level,
         }
       });

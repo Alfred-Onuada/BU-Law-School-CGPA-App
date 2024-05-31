@@ -47,14 +47,14 @@
         </div>
 
         <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-          <h4 class="mb-2 font-light text-gray-500 text-sm">Course: {{courseName}}</h4>
+          <h4 class="mb-2 font-light text-gray-500 text-sm">Course: {{course.name}}</h4>
 
           <div class="flex justify-between">
             <div>
               <h4 class="mb-2 font-normal text-sm">Old Score</h4>
               <input
                 type="number"
-                [value]="score"
+                [value]="course.score"
                 class="border-gray-200 border-[2px] px-2.5 py-2 w-[90%] mr-3 mb-3 rounded-md text-sm"
                 [disabled]=true
               />

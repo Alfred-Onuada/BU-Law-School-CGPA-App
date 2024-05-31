@@ -70,7 +70,7 @@ export class SemestersComponent {
       .subscribe({
         next: (data: ISemester[]) => {
           if (data) {
-            this.semesters = [...this.semesters, ...data].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+            this.semesters = [...this.semesters, ...data].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
           }
         }
       });

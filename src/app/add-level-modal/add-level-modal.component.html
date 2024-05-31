@@ -47,13 +47,19 @@
         </div>
 
         <form [formGroup]="form" (ngSubmit)="handleSubmit()">
-          <h4 class="mb-2 font-normal text-sm">Enter Level Title</h4>
-          <input
-            type="number"
+          <h4 class="mb-2 font-normal text-sm">Select Level Title</h4>
+
+          <select class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2 mb-3"
             formControlName="name"
-            placeholder="300"
-            class="border-gray-200 border-[2px] px-2.5 py-2 w-[100%] mr-3 mb-3 rounded-md text-sm"
-          />
+            >
+            <option value="100">100 Level</option>
+            <option value="200">200 Level</option>
+            <option value="300">300 Level</option>
+            <option value="400">400 Level</option>
+            <option value="500">500 Level</option>
+            <option value="600">600 Level</option>
+          </select>
+
           <button class="bg-[#014282] py-2 px-3 text-white rounded-md mr-3 flex items-center" type="submit">
             Create
             <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="loading"></div>
