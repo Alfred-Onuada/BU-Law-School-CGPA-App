@@ -4,16 +4,16 @@ export interface IAllStudentsList {
   lastName: string;
   matricNo: string;
   currentCGPA: number;
-  level1semester1GPA: number;
-  level1semester2GPA: number;
-  level2semester1GPA: number;
-  level2semester2GPA: number;
-  level3semester1GPA: number;
-  level3semester2GPA: number;
-  level4semester1GPA: number;
-  level4semester2GPA: number;
-  level5semester1GPA: number;
-  level5semester2GPA: number;
-  level6semester1GPA: number;
-  level6semester2GPA: number;
+  first100: number;
+  second100: number;
+  first200: number;
+  second200: number;
+  first300: number;
+  second300: number;
+  first400: number;
+  second400: number;
+  first500: number;
+  second500: number;
+  first600: number;
+  second600: number;
 }

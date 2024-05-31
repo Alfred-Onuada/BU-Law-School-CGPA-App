@@ -1,26 +1,38 @@
-import sequelize from "../config/db";
-import { DataTypes } from "sequelize";
+import sequelize from '../config/db';
+import { DataTypes } from 'sequelize';
 
-const SEMESTER = sequelize.define("Semester", {
-  id: {
-    type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,
-    primaryKey: true,
+const SEMESTER = sequelize.define(
+  'Semester',
+  {
+    id: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    optional: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    sessionId: {
+      type: DataTypes.STRING,
+      defaultValue: DataTypes.UUIDV4,
+      allowNull: false,
+    },
   },
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  optional: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
-  },
-  sessionId: {
-    type: DataTypes.STRING,
-    defaultValue: DataTypes.UUIDV4,
-    allowNull: false,
+  {
+    timestamps: true,
+    indexes: [
+      {
+        unique: true,
+        fields: ['name', 'sessionId'],
+      },
+    ],
   }
-}, {timestamps: true});
+);
 
 (async () => {
   await sequelize.sync();
