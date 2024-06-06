@@ -7,6 +7,10 @@ const COURSE = sequelize.define("Course", {
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
+  code: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,

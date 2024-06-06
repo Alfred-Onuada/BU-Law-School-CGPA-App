@@ -184,6 +184,7 @@ export class EditCoursesModalComponent {
       level: +this.level,
       sessionId: this.sessionId,
       semesterId: this.semesterId,
+      code: '',
     });
   }
 
@@ -255,6 +256,7 @@ export class EditCoursesModalComponent {
       return;
     }
 
+    console.log(this.courses);
     this.coursesSub$ = this.coursesService.saveCourses(this.courses).subscribe({
       next: (response) => {
         this.showSuccess = true;
@@ -271,7 +273,7 @@ export class EditCoursesModalComponent {
         console.error(error);
 
         this.showError = true;
-        this.errorMessage = error.error.message;
+        this.errorMessage = error.error.message;
 
         this.saveCoursesLoading = false;
 
@@ -291,6 +293,8 @@ export class EditCoursesModalComponent {
       this.courses[idx].name = event.target.value;
     } else if (field === 'units') {
       this.courses[idx].units = +event.target.value;
+    } else if (field === 'code') {
+      this.courses[idx].code = event.target.value;
     }
   }
 

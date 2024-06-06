@@ -400,7 +400,7 @@ export async function saveCourses(req: Request, res: Response) {
 
     // this is how upsert works in sequelize, the fields array is used to specify the fields to update
     // the updateOnDuplicate option is used to specify the fields to update when the primary key already exists
-    await COURSE.bulkCreate(courses, { updateOnDuplicate: ['name', 'units'] });
+    await COURSE.bulkCreate(courses, { updateOnDuplicate: ['name', 'units', 'code'] });
 
     res.status(201).json({ message: 'Success' });
   } catch (error: any) {
@@ -490,6 +490,7 @@ export async function getStudentGrades(req: Request, res: Response) {
 
         return {
           courseId: course.get('id'),
+          code: course.get('code'),
           name: course.get('name'),
           units: course.get('units'),
           grade: grade ? grade.get('grade') : 'NG',

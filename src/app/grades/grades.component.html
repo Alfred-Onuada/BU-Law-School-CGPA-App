@@ -48,6 +48,7 @@
       <table class="w-full text-sm text-left rtl:text-right text-gray-500">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50">
           <tr>
+            <th scope="col" class="px-6 py-3">Course Code</th>
             <th scope="col" class="px-6 py-3">Course</th>
             <th scope="col" class="px-6 py-3">No. of Units</th>
             <th scope="col" class="px-6 py-3">Score</th>
@@ -60,6 +61,9 @@
             class="odd:bg-white even:bg-gray-50 border-b"
             *ngFor="let course of coursesAndGrade"
           >
+            <th 
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">{{ course.code }}</th>
             <th
               scope="row"
               class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"

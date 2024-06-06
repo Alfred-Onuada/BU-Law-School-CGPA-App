@@ -76,8 +76,9 @@
         </button>
 
         <div class="flex my-5">
-          <h4 class="w-[50vw] mr-5">Course</h4>
-          <h4>Unit</h4>
+          <h4 class="w-[20vw]">Course Code</h4>
+          <h4 class="w-[50vw] ml-5">Course Name</h4>
+          <h4 class="ml-5">Unit</h4>
           <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="removeCoursesLoading"></div>
         </div>
 
@@ -85,6 +86,14 @@
           <div class="overflow-y-auto max-h-[60vh] pr-4">
             <div class="flex items-center mb-3" *ngFor="let idx = index; let course of courses">
               <input
+                placeholder="CRIM101"
+                type="text"
+                [value]="course.code"
+                (change)="updateCourse($event, idx, 'code')"
+                class="border-gray-200 border-[2px] px-2.5 py-2 w-[20vw] mr-5 rounded-md text-sm"
+              />
+              <input
+                placeholder="Criminology 101"
                 type="text"
                 [value]="course.name"
                 (change)="updateCourse($event, idx, 'name')"
