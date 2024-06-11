@@ -1,1 +1,40 @@
-<p>login works!</p>
+<app-header [login]="true"></app-header>
+
+<div
+  class="mt-10 mx-20 py-[150px] px-10 bg-white rounded-md flex flex-col justify-center items-center relative"
+>
+  <img src="assets/cool-login-bg.png" alt="Background image" class="absolute left-0 bottom-0">
+  <div>
+    <h2 class="font-bold text-xl mb-3">Login to your account</h2>
+    <h2 class="text-[gray] mb-5">Enter your credentials to access your account</h2>
+
+    <div *ngIf="showError" class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <span class="block sm:inline">{{errorMessage}}</span>       
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()">
+      <h4 class="mb-2 font-normal text-sm">Email Address</h4>
+      <input
+        type="email"
+        formControlName="email"
+        class="border-gray-200 border-[2px] px-2.5 py-2 w-[50vw] mr-3 mb-3 rounded-md text-sm"
+      />
+    
+      <h4 class="mb-2 font-normal text-sm">Password</h4>
+      <input
+        [type]="showPassword ? 'text' : 'password'"
+        formControlName="password"
+        class="border-gray-200 border-[2px] px-2.5 py-2 w-[50vw] mr-3 mb-3 rounded-md text-sm"
+      />
+      <div class="flex items-center mb-3">
+        <input type="checkbox" id="show-password" (change)="togglePassword()">
+        <label class="text-[gray] text-sm ml-3" for="show-password">Show Password</label>
+      </div>
+    
+      <button class="bg-[#014282] py-2 px-3 w-[50vw] text-white rounded-md mt-3 flex items-center justify-center">
+        Login
+        <div class="loader ease-linear rounded-full border-2 border-t-2 h-5 w-5 ml-4" *ngIf="loading"></div>
+      </button>
+    </form>
+  </div>
+</div>

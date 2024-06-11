@@ -9,13 +9,16 @@
   </div>
   <div class="flex items-center">
     <h4 class="text-white mr-8 underline-animation" routerLink="">Home</h4>
+    <h4 class="text-white mr-8 underline-animation" routerLink="/login">Login</h4>
+
     <h4 class="text-white mr-8 underline-animation"
-     (click)="openAddStudentsModal()">
+     (click)="openAddStudentsModal()"
+     *ngIf="!login">
       Add Student
     </h4>
-    <h4 class="text-white mr-8 underline-animation" routerLink="/all-students">All Students</h4>
+    <h4 class="text-white mr-8 underline-animation" routerLink="/all-students" *ngIf="!login">All Students</h4>
     <h4 class="text-white mr-8 underline-animation"
-      (click)="openEditCoursesModal()">
+      (click)="openEditCoursesModal()" *ngIf="!login">
       Manage Courses
     </h4>
     <!-- <h4 class="text-white mr-8 underline-animation">Create a User</h4> -->

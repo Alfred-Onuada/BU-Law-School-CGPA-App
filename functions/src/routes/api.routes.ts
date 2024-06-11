@@ -18,9 +18,15 @@ import {
   getStudent,
   getStudentGrades,
   saveGrades,
-  getAllStudents
+  getAllStudents,
+  login,
 } from '../controllers/api.controller';
+import { isLoggedIn } from '../middlewares/auth.middleware';
 const router = Router();
+
+router.post('/auth/login', login);
+
+router.use(isLoggedIn);
 
 router.get('/sessions', getSessions);
 

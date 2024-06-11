@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { EditCoursesModalComponent } from "../edit-courses-modal/edit-courses-modal.component";
@@ -13,6 +13,8 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
     imports: [CommonModule, RouterLink, MatDialogModule, RouterLink]
 })
 export class HeaderComponent {
+    @Input() login: boolean = false;
+
     constructor(
         public dialog: MatDialog
     ) {}

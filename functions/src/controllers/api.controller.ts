@@ -7,6 +7,8 @@ import { Op } from 'sequelize';
 import sequelize from 'sequelize/lib/sequelize';
 import COURSE from '../models/course.model';
 import GRADE from '../models/grade.model';
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
 
 export async function getSessions(_: Request, res: Response) {
   try {
@@ -789,6 +791,37 @@ export async function getAllStudents(req: Request, res: Response) {
         message: 'Success',
         data: { students: studentsWithCGPA, total: result.count },
       });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+}
+
+export async function login(req: Request, res: Response) {
+  try {
+    const {email, password} = req.body;
+
+    if (!email || !password) {
+      res.status(400).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const [adminEmail, adminPass] = [process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD];
+
+    if (email !== adminEmail) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const passwordMatch = bcrypt.compareSync(password, adminPass as string);
+
+    if (!passwordMatch) {
+      res.status(401).json({ message: 'Invalid credentials' });
+      return;
+    }
+
+    const token = jwt.sign({ email }, process.env.JWT_SECRET as string, { expiresIn: '30d' });
+
+    res.status(200).json({ message: 'Success', data: token });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
