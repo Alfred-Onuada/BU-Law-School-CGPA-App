@@ -1,7 +1,7 @@
 {
   "name": "functions",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && npm run build --prefix ../ && cp -r src/public lib",
     "dev": "ts-node-dev ./src/index",
     "start": "export NODE_ENV=production && node ./lib/index"
   },
