@@ -21,7 +21,7 @@ async function main() {
   app.use('api', apiRoutes);
 
   app.all('*', (_, res) => {
-    res.status(404).json({ message: 'There is nothing here. 404 Not Found' });
+    res.sendFile('public/index.html', { root: __dirname });
   });
 
   app.listen(process.env.PORT || 3453, () => {
