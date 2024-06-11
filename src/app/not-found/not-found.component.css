@@ -1,0 +1,20 @@
+.underline-animation {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.underline-animation::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -10px; /* Adjust the distance of the underline from the text */
+  width: 0%;
+  height: 3px; /* Adjust the thickness of the underline */
+  background-color: black; /* Change underline color as needed */
+  transition: width 0.3s ease; /* Smooth transition for the animation */
+}
+
+.underline-animation:hover::after {
+  width: 100%; /* Hide the underline initially */
+}
