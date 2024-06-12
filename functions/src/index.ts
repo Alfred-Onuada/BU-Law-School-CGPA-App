@@ -14,12 +14,12 @@ app.use(
 );
 
 async function main() {
+  app.use('/api', apiRoutes);
+
   app.get('', (_, res) => {
     res.sendFile('public/index.html', { root: __dirname });
   });
   
-  app.use('api', apiRoutes);
-
   app.all('*', (_, res) => {
     res.sendFile('public/index.html', { root: __dirname });
   });
