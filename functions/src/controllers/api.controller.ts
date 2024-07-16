@@ -6,7 +6,7 @@ import STUDENT from '../models/student.model';
 import { Op } from 'sequelize';
 import sequelize from 'sequelize/lib/sequelize';
 import COURSE from '../models/course.model';
-import GRADE from '../models/grade.model';
+import GRADE, { recalculateGradePoint } from '../models/grade.model';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
@@ -398,6 +398,11 @@ export async function saveCourses(req: Request, res: Response) {
       if (!course.id) {
         delete course.id;
       }
+    });
+
+    // update grades for all the courses
+    courses.forEach(async (course) => {
+      await recalculateGradePoint(course.id, course.units);
     });
 
     // this is how upsert works in sequelize, the fields array is used to specify the fields to update

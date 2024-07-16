@@ -44,6 +44,16 @@ const GRADE = sequelize.define("Grade", {
   }
 }, {timestamps: true});
 
+// Function to recalculate gradePoint based on Course details
+export async function recalculateGradePoint(courseId: string, newUnits: number) {
+  const grades = await GRADE.findAll({ where: { courseId } });
+  for (const grade of grades) {
+    const gradeLetter = (grade as any).grade;
+    (grade as any).gradePoint = newUnits * (gradeLetter === 'A' ? 5 : gradeLetter === 'B' ? 4 : gradeLetter === 'C' ? 3 : gradeLetter === 'D' ? 2 : gradeLetter === 'E' ? 1 : 0)
+    await grade.save();
+  }
+};
+
 (async () => {
   await sequelize.sync();
 })();
