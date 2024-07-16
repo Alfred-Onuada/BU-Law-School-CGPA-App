@@ -402,7 +402,7 @@ export async function saveCourses(req: Request, res: Response) {
 
     // update grades for all the courses
     courses.forEach(async (course) => {
-      await recalculateGradePoint(course.id, course.units);
+      if (course.id) await recalculateGradePoint(course.id, course.units);
     });
 
     // this is how upsert works in sequelize, the fields array is used to specify the fields to update
