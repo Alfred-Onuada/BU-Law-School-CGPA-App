@@ -274,14 +274,23 @@ export class AllStudentsListComponent {
   }
 
   convertToCSV(array: any[]): string {
-    const header = Object.keys(array[0]).join(',');
-    const rows = array.map((obj) =>
-      Object.values(obj)
+    let header = Object.keys(array[0]).join(',');
+    const rows = array.map((obj) => {
+      // check if it has more columns
+      if (Object.keys(obj).length > header.split(',').length) {
+        const missingColumns = Object.keys(obj)
+          .filter((key) => !header.includes(key))
+          .join(',');
+
+        header += `,${missingColumns}`;
+      }
+
+      return Object.values(obj)
         .map((value) =>
           typeof value === 'string' ? `"${value.replace(/"/g, '""')}"` : value
         )
         .join(',')
-    );
+    });
     return [header, ...rows].join('\r\n');
   }
 

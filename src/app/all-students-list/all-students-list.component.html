@@ -94,6 +94,8 @@
           <tr>
             <th scope="col" class="px-6 py-3">Student name</th>
             <th scope="col" class="px-6 py-3">Matric Number</th>
+            <th scope="col" class="px-6 py-3">Enrollment Year</th>
+            <th scope="col" class="px-6 py-3">Level at Enrollment</th>
             <th scope="col" class="px-6 py-3">Current CGPA</th>
             <th scope="col" class="px-6 py-3">GPA 100 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 100 level 2nd Semester</th>
@@ -119,6 +121,8 @@
               {{student.lastName + ' ' + student.firstName}}
             </th>
             <td class="px-6 py-4">{{student.matricNo}}</td>
+            <td class="px-6 py-4">{{student.yearEnrolled}}</td>
+            <td class="px-6 py-4">{{student.levelAtEnrollment}}</td>
             <td class="px-6 py-4">{{student.currentCGPA}}</td>
             <td class="px-6 py-4">{{student.first100 || 'N/A'}}</td>
             <td class="px-6 py-4">{{student.second100 || 'N/A'}}</td>

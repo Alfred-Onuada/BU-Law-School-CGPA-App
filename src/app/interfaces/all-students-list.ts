@@ -1,5 +1,7 @@
 export interface IAllStudentsList {
   id: string;
+  levelAtEnrollment: number;
+  yearEnrolled: number;
   firstName: string;
   lastName: string;
   matricNo: string;
