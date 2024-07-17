@@ -10,6 +10,7 @@ const sequelize = new Sequelize({
   host: process.env.NODE_ENV === 'production' ? process.env.DB_HOST as string : process.env.DEV_DB_HOST as string,
   port: parseInt(process.env.NODE_ENV === 'production' ? process.env.DB_PORT as string : process.env.DEV_DB_PORT as string),
   dialect: 'mysql',
+  logging: false,
 });
 
 (async () => {

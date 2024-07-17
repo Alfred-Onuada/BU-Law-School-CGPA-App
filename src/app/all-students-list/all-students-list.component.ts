@@ -310,4 +310,8 @@ export class AllStudentsListComponent {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   }
+
+  isNumber(value: any): boolean {
+    return !isNaN(value);
+  }
 }

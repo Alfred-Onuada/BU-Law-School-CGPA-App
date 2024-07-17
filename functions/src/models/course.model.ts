@@ -1,5 +1,6 @@
 import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
+import SEMESTER from "./semester.model";
 
 const COURSE = sequelize.define("Course", {
   id: {
@@ -36,5 +37,7 @@ const COURSE = sequelize.define("Course", {
 (async () => {
   await sequelize.sync();
 })();
+
+COURSE.belongsTo(SEMESTER, { foreignKey: 'semesterId', as: 'semester'});
 
 export default COURSE;
