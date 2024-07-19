@@ -299,11 +299,11 @@ export async function getStudents(req: Request, res: Response) {
         }]
       });
 
-      let totalGradePointsGained = grades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-      let totalPossibleGradePoints = grades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
+      const totalGradePointsGained = grades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+      const totalUnitsSemester = grades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
 
-      const semesterGPA = totalPossibleGradePoints > 0
-        ? (totalGradePointsGained / totalPossibleGradePoints) * 5
+      const semesterGPA = totalUnitsSemester > 0
+        ? totalGradePointsGained / totalUnitsSemester
         : 0;
 
       // calculate CGPA - use all the person's assigned grades
@@ -318,11 +318,11 @@ export async function getStudents(req: Request, res: Response) {
         }]
       })
 
-      const totalPossibleGradePointsForAllCourses = allGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
       const totalGradePointsGainedForAllCourses = allGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+      const totalUnits = allGrades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
 
-      const CGPA = totalPossibleGradePointsForAllCourses > 0
-        ? (totalGradePointsGainedForAllCourses / totalPossibleGradePointsForAllCourses) * 5
+      const CGPA = totalUnits > 0
+        ? totalGradePointsGainedForAllCourses / totalUnits
         : 0;
 
       return { ...studentData, semesterGPA: parseFloat(semesterGPA.toFixed(2)), CGPA: parseFloat(CGPA.toFixed(2)) };
@@ -682,10 +682,10 @@ export async function getAllStudents(req: Request, res: Response) {
           });
 
           let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = levelGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
+          let totalUnits = levelGrades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
 
-          const semesterGPA = totalPossibleGradePoints > 0
-            ? (totalGradePointsGained / totalPossibleGradePoints) * 5
+          const semesterGPA = totalUnits > 0
+            ? totalGradePointsGained / totalUnits
             : 0;
 
           allGPAs[`first${lvl}`] = parseFloat(semesterGPA.toFixed(2));
@@ -707,10 +707,10 @@ export async function getAllStudents(req: Request, res: Response) {
           });
 
           let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = levelGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
+          let totalUnits = levelGrades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
 
-          const semesterGPA = totalPossibleGradePoints > 0
-            ? (totalGradePointsGained / totalPossibleGradePoints) * 5
+          const semesterGPA = totalUnits > 0
+            ? totalGradePointsGained / totalUnits
             : 0;
 
           allGPAs[`second${lvl}`] = parseFloat(semesterGPA.toFixed(2));
@@ -729,11 +729,11 @@ export async function getAllStudents(req: Request, res: Response) {
         }]
       })
 
-      const totalPossibleGradePointsForAllCourses = allGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
       const totalGradePointsGainedForAllCourses = allGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+      const totalUnits = allGrades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
 
-      const CGPA = totalPossibleGradePointsForAllCourses > 0
-        ? (totalGradePointsGainedForAllCourses / totalPossibleGradePointsForAllCourses) * 5
+      const CGPA = totalUnits > 0
+        ? totalGradePointsGainedForAllCourses / totalUnits
         : 0;
 
       return { ...studentData, currentCGPA: parseFloat(CGPA.toFixed(2)), ...allGPAs };
