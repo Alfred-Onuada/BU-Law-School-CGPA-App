@@ -99,16 +99,22 @@
             <th scope="col" class="px-6 py-3">Current CGPA</th>
             <th scope="col" class="px-6 py-3">GPA 100 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 100 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 100 level Summer</th>
             <th scope="col" class="px-6 py-3">GPA 200 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 200 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 200 level Summer</th>
             <th scope="col" class="px-6 py-3">GPA 300 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 300 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 300 level Summer</th>
             <th scope="col" class="px-6 py-3">GPA 400 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 400 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 400 level Summer</th>
             <th scope="col" class="px-6 py-3">GPA 500 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 500 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 500 level Summer</th>
             <th scope="col" class="px-6 py-3">GPA 600 level 1st Semester</th>
             <th scope="col" class="px-6 py-3">GPA 600 level 2nd Semester</th>
+            <th scope="col" class="px-6 py-3">GPA 600 level Summer</th>
           </tr>
         </thead>
         <tbody>
@@ -126,14 +132,19 @@
             <td class="px-6 py-4">{{student.currentCGPA}}</td>
             <td class="px-6 py-4">{{isNumber(student.first100) ? student.first100 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second100) ? student.second100 : 'N/A'}}</td>
+            <td class="px-6 py-4">{{isNumber(student.summer100) ? student.summer100 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.first200) ? student.first200 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second200) ? student.second200 : 'N/A'}}</td>
+            <td class="px-6 py-4">{{isNumber(student.summer200) ? student.summer200 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.first300) ? student.first300 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second300) ? student.second300 : 'N/A'}}</td>
+            <td class="px-6 py-4">{{isNumber(student.summer300) ? student.summer300 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.first400) ? student.first400 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second400) ? student.second400 : 'N/A'}}</td>
+            <td class="px-6 py-4">{{isNumber(student.summer400) ? student.summer400 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.first500) ? student.first500 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second500) ? student.second500 : 'N/A'}}</td>
+            <td class="px-6 py-4">{{isNumber(student.summer500) ? student.summer500 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.first600) ? student.first600 : 'N/A'}}</td>
             <td class="px-6 py-4">{{isNumber(student.second600) ? student.second600 : 'N/A'}}</td>
           </tr>
