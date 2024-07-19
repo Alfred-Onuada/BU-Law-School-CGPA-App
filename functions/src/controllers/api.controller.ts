@@ -285,6 +285,7 @@ export async function getStudents(req: Request, res: Response) {
     const studentsWithGPA = await Promise.all(result.rows.map(async (student) => {
       const studentData = student.toJSON();
 
+      // GPA use just the courses I have grades for
       const grades = await GRADE.findAll({
         where: {
           studentId: studentData.id,
@@ -298,143 +299,31 @@ export async function getStudents(req: Request, res: Response) {
         }]
       });
 
-      const allCoursesWithinSemester = await COURSE.findAll({
-        where: {
-          semesterId,
-          level,
-        }
-      });
-
       let totalGradePointsGained = grades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-      let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+      let totalPossibleGradePoints = grades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
 
       const semesterGPA = totalPossibleGradePoints > 0
         ? (totalGradePointsGained / totalPossibleGradePoints) * 5
         : 0;
 
-      const currentYear = new Date().getFullYear();
-      const yearsSinceEnrollment = currentYear - studentData.yearEnrolled;
+      // calculate CGPA - use all the person's assigned grades
+      const allGrades = await GRADE.findAll({
+        where: {
+          studentId: studentData.id,
+        },
+        include: [{
+          model: COURSE,
+          as: 'course',
+          required: true,
+        }]
+      })
 
-      const levels = [100, 200, 300, 400, 500, 600]
-        .filter(lvl => lvl >= (student.get('levelAtEnrollment') as number))
-        .filter(lvl => lvl <= yearsSinceEnrollment * 100);
+      const totalPossibleGradePointsForAllCourses = allGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
+      const totalGradePointsGainedForAllCourses = allGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
 
-      let gpaSum = 0;
-      let noOfSemesters = 0;
-
-      // so now for each level I need the GPA for the first and second semesters
-      for (const lvl of levels) {
-        // figure out what session the student was in this level, then use that session Id to find the 'first semester' and 'second semester' for that session
-        // then continue with the calculation
-
-        // get the session id for this level (start from when the student enrolled)
-        let currentYear = studentData.yearEnrolled;
-        let currentLevel = studentData.levelAtEnrollment;
-
-        if (currentLevel > lvl) {
-          continue;
-        }
-
-        while (currentLevel < lvl) {
-          currentYear++;
-          currentLevel += 100;
-        }
-
-        const session = await SESSION.findOne({
-          where: {
-            startYear: currentYear,
-          }
-        });
-
-
-        if (!session) {
-          continue;
-        }
-
-        const firstSemester = await SEMESTER.findOne({
-          where: {
-            sessionId: session.get('id'),
-            name: 'First Semester',
-          }
-        });
-
-        const secondSemester = await SEMESTER.findOne({
-          where: {
-            sessionId: session.get('id'),
-            name: 'Second Semester',
-          }
-        });
-
-        // TODO: include a check for if the person did summer semester, and add only the courses for which they have marks in summer
-
-        if (firstSemester) {
-          // find GPA
-          const levelGrades = await GRADE.findAll({
-            where: {
-              studentId: studentData.id,
-              studentLevel: lvl,
-              semesterId: firstSemester.get('id'),
-            },
-            include: [{
-              model: COURSE,
-              as: 'course',
-              required: true,
-            }]
-          });
-
-          const allCoursesWithinSemester = await COURSE.findAll({
-            where: {
-              level: lvl,
-              semesterId: firstSemester.get('id'),
-            }
-          });
-
-          let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
-
-          const semesterGPA = totalPossibleGradePoints > 0
-            ? (totalGradePointsGained / totalPossibleGradePoints) * 5
-            : 0;
-
-          gpaSum += semesterGPA;
-          noOfSemesters++;
-        }
-
-        if (secondSemester) {
-          // find GPA
-          const levelGrades = await GRADE.findAll({
-            where: {
-              studentId: studentData.id,
-              studentLevel: lvl,
-              semesterId: secondSemester.get('id'),
-            },
-            include: [{
-              model: COURSE,
-              as: 'course',
-              required: true,
-            }]
-          });
-
-          const allCoursesWithinSemester = await COURSE.findAll({
-            where: {
-              level: lvl,
-              semesterId: secondSemester.get('id'),
-            }
-          });
-
-          let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
-
-          const semesterGPA = totalPossibleGradePoints > 0
-            ? (totalGradePointsGained / totalPossibleGradePoints) * 5
-            : 0;
-
-          gpaSum += semesterGPA;
-          noOfSemesters++;
-        }
-      }
-
-      const CGPA = noOfSemesters > 0 ? gpaSum / noOfSemesters : 0;
+      const CGPA = totalPossibleGradePointsForAllCourses > 0
+        ? (totalGradePointsGainedForAllCourses / totalPossibleGradePointsForAllCourses) * 5
+        : 0;
 
       return { ...studentData, semesterGPA: parseFloat(semesterGPA.toFixed(2)), CGPA: parseFloat(CGPA.toFixed(2)) };
     }));
@@ -733,8 +622,6 @@ export async function getAllStudents(req: Request, res: Response) {
         .filter(lvl => lvl <= yearsSinceEnrollment * 100);
 
       const allGPAs: any = {};
-      let gpaSum = 0;
-      let noOfSemesters = 0;
 
       // so now for each level I need the GPA for the first and second semesters
       for (const lvl of levels) {
@@ -779,8 +666,6 @@ export async function getAllStudents(req: Request, res: Response) {
           }
         });
 
-        // TODO: include a check for if the person did summer semester, and add only the courses for which they have marks in summer
-
         if (firstSemester) {
           // find GPA
           const levelGrades = await GRADE.findAll({
@@ -796,23 +681,14 @@ export async function getAllStudents(req: Request, res: Response) {
             }]
           });
 
-          const allCoursesWithinSemester = await COURSE.findAll({
-            where: {
-              level: lvl,
-              semesterId: firstSemester.get('id'),
-            }
-          });
-
           let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+          let totalPossibleGradePoints = levelGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
 
           const semesterGPA = totalPossibleGradePoints > 0
             ? (totalGradePointsGained / totalPossibleGradePoints) * 5
             : 0;
 
           allGPAs[`first${lvl}`] = parseFloat(semesterGPA.toFixed(2));
-          gpaSum += semesterGPA;
-          noOfSemesters++;
         }
 
         if (secondSemester) {
@@ -830,27 +706,36 @@ export async function getAllStudents(req: Request, res: Response) {
             }]
           });
 
-          const allCoursesWithinSemester = await COURSE.findAll({
-            where: {
-              level: lvl,
-              semesterId: secondSemester.get('id'),
-            }
-          });
-
           let totalGradePointsGained = levelGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
-          let totalPossibleGradePoints = allCoursesWithinSemester.reduce((acc, course) => acc + (course.get('units') as number) * 5, 0);
+          let totalPossibleGradePoints = levelGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
 
           const semesterGPA = totalPossibleGradePoints > 0
             ? (totalGradePointsGained / totalPossibleGradePoints) * 5
             : 0;
 
           allGPAs[`second${lvl}`] = parseFloat(semesterGPA.toFixed(2));
-          gpaSum += semesterGPA;
-          noOfSemesters++;
         }
       }
 
-      const CGPA = noOfSemesters > 0 ? gpaSum / noOfSemesters : 0;
+      // calculate CGPA - use all the person's assigned grades
+      const allGrades = await GRADE.findAll({
+        where: {
+          studentId: studentData.id,
+        },
+        include: [{
+          model: COURSE,
+          as: 'course',
+          required: true,
+        }]
+      })
+
+      const totalPossibleGradePointsForAllCourses = allGrades.reduce((acc, grade) => acc + ((grade.get('course') as {units: number}).units as number) * 5, 0);
+      const totalGradePointsGainedForAllCourses = allGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+
+      const CGPA = totalPossibleGradePointsForAllCourses > 0
+        ? (totalGradePointsGainedForAllCourses / totalPossibleGradePointsForAllCourses) * 5
+        : 0;
+
       return { ...studentData, currentCGPA: parseFloat(CGPA.toFixed(2)), ...allGPAs };
     }));
 
