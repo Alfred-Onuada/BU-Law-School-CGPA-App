@@ -5,13 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { IAllStudentsList } from '../interfaces/all-students-list';
 import { Subscription } from 'rxjs';
 import { StudentService } from '../services/student.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-all-students-list',
   standalone: true,
   templateUrl: './all-students-list.component.html',
   styleUrls: ['./all-students-list.component.css'],
-  imports: [CommonModule, HeaderComponent, FormsModule],
+  imports: [CommonModule, HeaderComponent, FormsModule, RouterLink],
 })
 export class AllStudentsListComponent {
   showError = false;

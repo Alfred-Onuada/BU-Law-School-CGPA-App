@@ -1,0 +1,129 @@
+<app-header></app-header>
+
+<div class="mt-10 mx-20 py-5 px-10 bg-white rounded-md">
+  <div *ngIf="transcriptLoading" class="flex justify-center items-center h-[70vh]">
+    <div
+      class="loader ease-linear rounded-full border-8 border-t-8 h-32 w-32"
+      *ngIf="!showError"
+    ></div>
+    <div
+      *ngIf="showError"
+      class="mb-5 w-[100%] shake bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+      role="alert"
+    >
+      <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
+  </div>
+
+  <div *ngIf="!transcriptLoading" #transcript>
+    <h4 class="text-center text-xl font-bold mb-10">Unofficial Record - For Advising Only</h4>
+    <div class="relative">
+      <div class="grid grid-cols-2 gap-x-10 mb-10">
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Full Name</h4>
+          <h4>{{studentInfo.firstName + " " + studentInfo.lastName}}</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">School</h4>
+          <h4>School of Law and Security Studies</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Matric Number</h4>
+          <h4>{{studentInfo.matricNo}}</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Year of Enrollment</h4>
+          <h4>{{studentInfo.yearEnrolled}}</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Level at Enrollment</h4>
+          <h4>{{studentInfo.levelAtEnrollment}} Level</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Nationality</h4>
+          <h4>Nigeria</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Degree</h4>
+          <h4>Bachelor of Laws (L.L.B.)</h4>
+        </div>
+        <div class="flex justify-between">
+          <h4 class="font-semibold">Cumulative Grade Point Average (CGPA)</h4>
+          <h4>{{studentInfo.cgpa}} (5.0 Scale)</h4>
+        </div>
+      </div>
+      <img src="assets/logo.jpeg" alt="A watermark" class="absolute center-abs">
+    </div>
+
+    <div class="mb-10 overflow-x-auto">
+      <div class="flex justify-between items-center mb-5">
+        <h4 class="text-lg font-semibold">Sessions, Semesters and Grades</h4>
+        <button
+          class="bg-[#014282] py-2 px-3 text-white rounded-md flex items-center"
+          (click)="exportTranscript()"
+        >
+          Export Transcript
+        </button>
+      </div>
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3">Session</th>
+            <th scope="col" class="px-6 py-3">F.S GPA</th>
+            <th scope="col" class="px-6 py-3">F.S Cum. Hrs</th>
+            <th scope="col" class="px-6 py-3">F.S CGPA</th>
+            <th scope="col" class="px-6 py-3">S.S GPA</th>
+            <th scope="col" class="px-6 py-3">S.S Cum. Hrs</th>
+            <th scope="col" class="px-6 py-3">S.S CGPA</th>
+            <th scope="col" class="px-6 py-3">Summer GPA</th>
+            <th scope="col" class="px-6 py-3">Summer Cum. Hrs</th>
+            <th scope="col" class="px-6 py-3">Summer CGPA</th>
+        </thead>
+        <tbody>
+          <tr class="odd:bg-white even:bg-gray-50 border-b"
+            *ngFor="let session of sessions">
+            <td class="px-6 py-4">{{session}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['First Semester']?.gpa || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['First Semester']?.cumHrs || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['First Semester']?.cgpa || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Second Semester']?.gpa || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Second Semester']?.cumHrs || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Second Semester']?.cgpa || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Summer']?.gpa || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Summer']?.cumHrs || 'N/A'}}</td>
+            <td class="px-6 py-4">{{gpaSummary[session]['Summer']?.cgpa || 'N/A'}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mb-10 overflow-x-auto">
+      <div class="flex justify-between items-center mb-5">
+        <h4 class="text-lg font-semibold">Courses and Grades</h4>
+      </div>
+      <table class="w-full text-sm text-left rtl:text-right text-gray-500">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+          <tr>
+            <th scope="col" class="px-6 py-3">Session</th>
+            <th scope="col" class="px-6 py-3">Semester</th>
+            <th scope="col" class="px-6 py-3">Course Code</th>
+            <th scope="col" class="px-6 py-3">Course Title</th>
+            <th scope="col" class="px-6 py-3">Hours</th>
+            <th scope="col" class="px-6 py-3">Grade</th>
+        </thead>
+        <tbody>
+          <tr class="odd:bg-white even:bg-gray-50 border-b"
+            *ngFor="let grade of grades">
+            <td class="px-6 py-4">{{grade.session.name}}</td>
+            <td class="px-6 py-4">{{grade.semester.name}}</td>
+            <td class="px-6 py-4">{{grade.course.code}}</td>
+            <td class="px-6 py-4">{{grade.course.name}}</td>
+            <td class="px-6 py-4">{{grade.course.units}}</td>
+            <td class="px-6 py-4">{{grade.grade}}</td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

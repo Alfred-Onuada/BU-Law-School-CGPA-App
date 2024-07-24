@@ -121,8 +121,8 @@
           <tr class="odd:bg-white even:bg-gray-50 border-b"
             *ngFor="let student of students">
             <th
-              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
-              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap cursor-pointer"
+              scope="row" [routerLink]="['/transcript']" [queryParams]="{'studentId': student.id}"
             >
               {{student.lastName + ' ' + student.firstName}}
             </th>

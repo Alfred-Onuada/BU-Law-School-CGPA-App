@@ -780,3 +780,108 @@ export async function login(req: Request, res: Response) {
     res.status(500).json({ message: error.message });
   }
 }
+
+export async function getTranscript(req: Request, res: Response) {
+  try {
+    const {studentId} = req.params;
+
+    if (!studentId) {
+      res.status(400).json({message: 'Invalid student ID'});
+      return;
+    }
+
+    // fetch the student bare details
+    const studentInfo = await STUDENT.findByPk(studentId);
+
+    if (!studentInfo) {
+      res.status(404).json({message: 'Student not found'});
+      return;
+    }
+
+    // add cgpa to studentInfo
+    // calculate CGPA - use all the person's assigned grades
+    const allGrades = await GRADE.findAll({
+      where: {
+        studentId: studentId,
+      },
+      order: [[{ model: SESSION, as: 'session' }, 'createdAt', 'ASC']],
+      include: [
+        {
+          model: COURSE,
+          as: 'course',
+          required: true,
+        },
+        {
+          model: SEMESTER,
+          as: 'semester',
+          required: true
+        },
+        {
+          model: SESSION,
+          as: 'session',
+          required: true
+        }
+      ],
+    })
+
+    const totalGradePointsGainedForAllCourses = allGrades.reduce((acc, grade) => acc + (grade.get('gradePoint') as number), 0);
+    const totalUnits = allGrades.reduce((acc, grade) => acc + (grade.get('course') as {units: number}).units, 0);
+
+    const CGPA = totalUnits > 0
+      ? totalGradePointsGainedForAllCourses / totalUnits
+      : 0;
+
+    const updatedStudentInfo = { ...studentInfo.toJSON(), cgpa: CGPA.toFixed(2) }
+
+    // get all grades
+    const grades = allGrades.map(x => x.toJSON());
+
+    // gpa summary
+    const gpaSummary = groupBy(grades, grade => grade.session.name);
+
+    let cumHrs = 0;
+    let cumPts = 0;
+
+    Object.keys(gpaSummary).forEach(session => {
+      gpaSummary[session] = groupBy(gpaSummary[session], grade => grade.semester.name);
+
+      // writing it out manually to maintain order
+      ['First Semester', 'Second Semester', 'Summer Semester'].forEach(semester => {
+        if (!gpaSummary[session][semester]) {
+          return;
+        }
+
+        const totalHrs = gpaSummary[session][semester].reduce((acc: number, grade: any) => acc + grade.course.units, 0);
+        const totalPts = gpaSummary[session][semester].reduce((acc: number, grade: any) => acc + grade.gradePoint, 0);
+
+        const semesterGPA = totalHrs > 0
+          ? totalPts / totalHrs
+          : 0;
+
+        cumPts += totalPts;
+        cumHrs += totalHrs;
+          
+        gpaSummary[session][semester] = {
+          gpa: semesterGPA.toFixed(2),
+          cumHrs: cumHrs,
+          cgpa: (cumPts / cumHrs).toFixed(2)
+        }
+      });
+    });
+    
+    res.status(200).json({message: 'Success', data: {studentInfo: updatedStudentInfo, grades, gpaSummary}});
+  } catch (error: any) {
+    res.status(500).json({message: error.message});
+  }
+}
+
+function groupBy(array: any[], keyFunction: (x: any) => any) {
+  return array.reduce((result, currentItem) => {
+    const key = keyFunction(currentItem);
+    if (!result[key]) {
+      result[key] = [];
+    }
+    result[key].push(currentItem);
+    return result;
+  }, {});
+}

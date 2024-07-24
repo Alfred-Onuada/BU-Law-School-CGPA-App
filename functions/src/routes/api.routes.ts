@@ -20,6 +20,7 @@ import {
   saveGrades,
   getAllStudents,
   login,
+  getTranscript
 } from '../controllers/api.controller';
 import { isLoggedIn } from '../middlewares/auth.middleware';
 const router = Router();
@@ -65,5 +66,7 @@ router.get('/grades', getStudentGrades);
 router.post('/grades', saveGrades);
 
 router.get('/all-students', getAllStudents);
+
+router.get('/student/:studentId/transcript', getTranscript);
 
 export default router;

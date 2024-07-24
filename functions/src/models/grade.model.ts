@@ -1,6 +1,8 @@
 import sequelize from "../config/db";
 import { DataTypes } from "sequelize";
 import COURSE from "./course.model";
+import SEMESTER from "./semester.model";
+import SESSION from "./session.model";
 
 const GRADE = sequelize.define("Grade", {
   id: {
@@ -59,5 +61,7 @@ export async function recalculateGradePoint(courseId: string, newUnits: number) 
 })();
 
 GRADE.belongsTo(COURSE, { foreignKey: 'courseId', as: 'course'});
+GRADE.belongsTo(SEMESTER, { foreignKey: 'semesterId', as: 'semester'});
+GRADE.belongsTo(SESSION, { foreignKey: 'sessionId', as: 'session'});
 
 export default GRADE;
